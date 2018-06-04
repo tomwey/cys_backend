@@ -21,6 +21,7 @@ index do
   end
   column :name
   column :mobile
+  column 'at', :created_at
   actions
 end
 
