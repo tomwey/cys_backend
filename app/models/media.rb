@@ -1,6 +1,10 @@
 class Media < ActiveRecord::Base
   validates :_type, :title, :cover, :owner_id, presence: true
   
+  has_one :radio_content, dependent: :destroy # 保存电台的额外信息，比如：作词，作曲，原唱，歌词
+  accepts_nested_attributes_for :radio_content, allow_destroy: true, 
+    reject_if: proc { |o| o[:content].blank? }
+  
   mount_uploader :cover, CoverImageUploader
   mount_uploader :file, MediaFileUploader
   
