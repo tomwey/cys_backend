@@ -44,6 +44,7 @@
       area: '区域'
       performer: '艺人'
       catalog: '分类'
+      media: '电台/MV'
     attributes:
       user:
         uid: 'ID'
@@ -223,6 +224,16 @@
         name: '名称'
         sort: '显示顺序'
         opened: '是否使用'
+      media:
+        _type: '作品类型'
+        title: '标题'
+        summary: '描述'
+        cover: '封面图'
+        file: '播放文件'
+        duration: '播放时长'
+        owner_id: '所属艺人'
+        opened: '是否上线'
+        sort: '显示顺序'
     errors:
       models:
         user: "用户"
