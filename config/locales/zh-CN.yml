@@ -44,7 +44,10 @@
       area: '区域'
       performer: '艺人'
       catalog: '分类'
-      media: '电台/MV'
+      media: '作品'
+      vote: '投票'
+      vote_item: '投票选项'
+      user_vote_log: '用户投票记录'
     attributes:
       user:
         uid: 'ID'
@@ -234,6 +237,20 @@
         owner_id: '所属艺人'
         opened: '是否上线'
         sort: '显示顺序'
+      vote:
+        uniq_id: 'ID'
+        title: '标题'
+        body: '内容'
+        body_url: '内容地址'
+        expired_at: '截止时间'
+        opened: '是否启用'
+        _type: '投票类型'
+        vote_count: '总投票数'
+        sort: '显示顺序'
+      vote_item:
+        vote_id: '所属投票'
+        performer_id: '候选艺人'
+        vote_count: '得票数'
     errors:
       models:
         user: "用户"

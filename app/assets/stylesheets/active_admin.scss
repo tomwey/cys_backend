@@ -84,6 +84,15 @@ form fieldset > ol >li p.inline-hints {
   }
 }
 
+a.button.has_many_add {
+  margin-left: 273px;
+  margin-bottom: 30px;
+}
+
+a.button.has_many_remove {
+  margin-left: 273px;
+}
+
 .avatar {
   .uface,
   .media-object { border-radius: 120px; }
