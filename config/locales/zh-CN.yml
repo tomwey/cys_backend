@@ -21,6 +21,7 @@
   activerecord:
     models:
       user: "用户"
+      auth_profile: '用户登录信息'
       user_session: '用户会话'
       user_device: '用户设备'
       admin: "管理员"
@@ -64,6 +65,19 @@
         created_at: '注册时间'
         total_prize_count: '抽奖总次数'
         prized_count: '抽过的次数'
+      auth_profile:
+        openid: 'OPENID'
+        provider: '平台方'
+        nickname: '昵称'
+        sex: '性别'
+        headimgurl: '头像'
+        unionid: 'UNIONID'
+        access_token: 'ACCESS TOKEN'
+        refresh_token: 'REFRESH TOKEN'
+        city: '城市'
+        language: '语言'
+        country: '国家'
+        province: '省份'
       message:
         message_template_id: '所属模板'
         content: '内容'
