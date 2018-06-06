@@ -237,6 +237,9 @@
         verified: '账号是否可用'
         school: '学校'
         bio: '个人简介'
+        birth: '生日'
+        height: '身高'
+        weight: '体重'
       catalog:
         name: '名称'
         sort: '显示顺序'
