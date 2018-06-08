@@ -423,6 +423,7 @@ DEPENDENCIES
   pg (= 0.20.0)
   posix-spawn
   puma
+  qiniu
   quiet_assets
   rack-attack
   rack-cors
