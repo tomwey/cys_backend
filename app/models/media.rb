@@ -8,15 +8,15 @@ class Media < ActiveRecord::Base
   mount_uploader :cover, CoverImageUploader
   # mount_uploader :file, MediaFileUploader
   
-  # validate :require_file_upload
-  # def require_file_upload
-  #   if self._type == 1 or self._type == 2
-  #     if file.blank?
-  #       errors.add(:base, '播放文件不能为空')
-  #       return false
-  #     end
-  #   end
-  # end
+  validate :require_file_upload, on: :create
+  def require_file_upload
+    if self._type == 1 or self._type == 2
+      if file.blank?
+        errors.add(:base, '播放文件不能为空')
+        return false
+      end
+    end
+  end
   
   def owner
     @owner ||= Performer.find_by(uniq_id: self.owner_id)
