@@ -31,10 +31,11 @@ module API
         end
       end
       
+      mount API::V1::HomeAPI
       mount API::V1::UsersAPI
-      mount API::V1::RedpackAPI
+      # mount API::V1::RedpackAPI
       mount API::V1::PagesAPI
-      mount API::V1::CatalogsAPI
+      # mount API::V1::CatalogsAPI
       mount API::V1::PayAPI
       mount API::V1::UtilsAPI
       # mount API::V1::UsersAPI

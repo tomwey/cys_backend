@@ -2,6 +2,9 @@ class Banner < ActiveRecord::Base
   validates :image, presence: true
   mount_uploader :image, BannerImageUploader
   
+  scope :opened, -> { where(opened: true) }
+  scope :sorted, -> { order('sort desc') }
+  
   before_create :generate_uid_and_private_token
   def generate_uid_and_private_token
     begin

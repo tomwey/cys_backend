@@ -654,44 +654,51 @@ module API
         expose :created_at, as: :time, format_with: :month_date_time
       end
       
-      # 活动详情
-      # class EventDetail < Event
-      #   unexpose :distance
-      #   expose :image do |model, opts|
-      #     model.image.url(:large)
-      #   end
-      #   expose :disable_text do |model, opts|
-      #     model.disable_text_with_opts(opts)
-      #   end
-      #   expose :view_count, :share_count, :likes_count, :sent_hb_count
-      #   expose :body, format_with: :null
-      #   expose :body_url, format_with: :null
-      #   expose :rule, if: proc { |e| e.ruleable.present? } do |model, opts|
-      #     if model.ruleable_type == 'QuizRule'
-      #       API::V1::Entities::QuizRule.represent model.ruleable
-      #     elsif model.ruleable_type == 'CheckinRule'
-      #       API::V1::Entities::CheckinRule.represent model.ruleable
-      #     else
-      #       {}
-      #     end
-      #   end
-      #   expose :latest_earns do |model, opts|
-      #     if model.latest_earns.empty?
-      #       []
-      #     else
-      #       API::V1::Entities::EventEarnLog.represent model.latest_earns
-      #     end
-      #   end
-      # end
-      
       class Banner < Base
         expose :uniq_id, as: :id
+        expose :title
         expose :image do |model, opts|
           model.image.url(:large)
         end
         expose :link, format_with: :null
         
-        expose :view_count, :click_count
+        # expose :view_count, :click_count
+      end
+      
+      class Performer < Base
+        expose :uniq_id, as: :id
+        expose :name
+        expose :avatar do |model, opts|
+          model.avatar.url(:large)
+        end
+      end
+      
+      class VoteItem < Base
+        expose :perform, using: API::V1::Entities::Performer
+        expose :vote_count
+      end
+      
+      class Vote < Base
+        expose :uniq_id, as: :id
+        expose :title
+        expose :body
+        expose :body_url
+        expose :_type, as: :type
+        expose :vote_count
+        expose :vote_items, using: API::V1::Entities::VoteItem
+      end
+      
+      class Media < Base
+        expose :uniq_id, as: :id
+        expose :title
+        expose :summary, as: :subtitle, format_with: :null
+        expose :cover do |model, opts|
+          model.cover.url(:large)
+        end
+        expose :media_file_url, as: :media_file
+        expose :duration
+        expose :views_count, :likes_count, :comments_count, :danmu_count
+        expose :owner, using: API::V1::Entities::Performer
       end
       
       # 供应商
