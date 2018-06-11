@@ -49,7 +49,7 @@ module API
             vote: API::V1::Entities::Vote.represent(@vote),
             featured: @sections,
             sections: @modules,
-            performers: API::V1::Entities::Vote.represent(@performers)
+            performers: API::V1::Entities::Performer.represent(@performers)
           }
           
           { code: 0, message: 'ok', data: result }
