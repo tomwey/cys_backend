@@ -677,6 +677,7 @@ module API
       class VoteItem < Base
         expose :perform, using: API::V1::Entities::Performer
         expose :vote_count
+        expose :percent
       end
       
       class Vote < Base
