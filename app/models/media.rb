@@ -8,6 +8,12 @@ class Media < ActiveRecord::Base
   mount_uploader :cover, CoverImageUploader
   # mount_uploader :file, MediaFileUploader
   
+  scope :opened, -> { where('media.opened = ?', true) }
+  # scope :sorted, -> { order('media.sort desc') }
+  
+  scope :latest, -> { order('media.id desc') }
+  scope :hot,    -> { order('media.views_count desc, media.likes_count desc') } 
+  
   validate :require_file_upload, on: :create
   def require_file_upload
     if self._type == 1 or self._type == 2

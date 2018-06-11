@@ -32,6 +32,7 @@ module API
       end
       
       mount API::V1::HomeAPI
+      mount API::V1::MediaAPI
       mount API::V1::UsersAPI
       # mount API::V1::RedpackAPI
       mount API::V1::PagesAPI

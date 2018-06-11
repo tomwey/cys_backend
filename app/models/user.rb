@@ -157,4 +157,9 @@ class User < ActiveRecord::Base
     self.save!
   end
   
+  def liked?(likeable)
+    return false if likeable.blank?
+    Like.where(user_id: self.uid, likeable_type: likeable.class, likeable_id: likeable.uniq_id || likeable.id).count > 0
+  end
+  
 end

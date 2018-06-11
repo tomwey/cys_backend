@@ -704,6 +704,17 @@ module API
         expose :owner, using: API::V1::Entities::Performer
       end
       
+      class MediaDetail < Media
+        expose :liked do |model,opts|
+          if opts and opts[:opts] and opts[:opts][:user]
+            user = opts[:opts][:user]
+            user.liked?(model)
+          else
+            false
+          end
+        end
+      end
+      
       # 供应商
       class Merchant < Base
         expose :merch_id, as: :id
