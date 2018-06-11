@@ -671,6 +671,7 @@ module API
         expose :avatar do |model, opts|
           model.avatar.url(:large)
         end
+        expose :school
       end
       
       class VoteItem < Base
@@ -685,6 +686,7 @@ module API
         expose :body_url
         expose :_type, as: :type
         expose :vote_count
+        expose :expired_at, as: :expire_time, format_with: :month_date_time
         expose :vote_items, using: API::V1::Entities::VoteItem
       end
       
