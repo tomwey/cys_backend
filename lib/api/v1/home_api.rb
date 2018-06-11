@@ -33,25 +33,23 @@ module API
               subtitle: '不断提升自己'
             }
           ]
-          # 功能区块
+          # MV区块
           @media = Media.where(opened: true).order('sort desc').limit(3)
-          @performers = Performer.where(verified: true).limit(4)
           @modules = [
             {
               name: '校园MV',
               list: API::V1::Entities::Media.represent(@media)
-            },
-            {
-              name: '男神女神',
-              list: API::V1::Entities::Performer.represent(@performers)
             }
           ]
+          
+          @performers = Performer.where(verified: true).limit(4)
           
           result = {
             banners: API::V1::Entities::Banner.represent(@banners),
             vote: API::V1::Entities::Vote.represent(@vote),
             featured: @sections,
-            sections: @modules
+            sections: @modules,
+            performers: API::V1::Entities::Vote.represent(@performers)
           }
           
           { code: 0, message: 'ok', data: result }
