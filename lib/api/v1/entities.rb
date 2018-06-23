@@ -50,23 +50,6 @@ module API
         expose :must_upgrade
       end
       
-      class MediaProvider < Base
-        expose :uniq_id, as: :id
-        expose :name
-        expose :icon do |model, opts|
-          model.icon.url(:large)
-        end
-        expose :url
-      end
-      
-      class MediaHistory < Base
-        expose :uniq_id, as: :id
-        expose :title, :source_url
-        expose :progress, format_with: :null
-        expose :created_at, as: :time, format_with: :chinese_datetime
-        expose :provider, using: API::V1::Entities::MediaProvider
-      end
-      
       # 用户详情
       class User < UserBase
         expose :uid, as: :id
@@ -77,14 +60,14 @@ module API
         expose :avatar do |model, opts|
           model.format_avatar_url
         end
-        expose :balance, format_with: :rmb_format
-        expose :vip_expired_at, as: :vip_time, format_with: :chinese_date
-        expose :left_days, as: :vip_status
-        expose :qrcode_url
-        expose :portal_url
+        # expose :balance, format_with: :rmb_format
+        # expose :vip_expired_at, as: :vip_time, format_with: :chinese_date
+        # expose :left_days, as: :vip_status
+        # expose :qrcode_url
+        # expose :portal_url
         unexpose :private_token, as: :token
-        expose :wx_bind
-        expose :qq_bind
+        # expose :wx_bind
+        # expose :qq_bind
         
         # expose :vip_expired_at, as: :vip_time, format_with: :chinese_date
         # expose :left_days do |model, opts|
@@ -108,12 +91,6 @@ module API
         expose :title, :slug
       end
       
-      class VipCard < Base
-        expose :code
-        expose :month
-        expose :actived_at, as: :active_time, format_with: :chinese_datetime
-      end
-      
       class Page < SimplePage
         expose :title, :body
       end
@@ -127,16 +104,6 @@ module API
           model.data.url
         end
         expose :width, :height
-      end
-      
-      # 红包
-      class Hongbao < Base
-        expose :uniq_id, as: :id
-        expose :total_money, format_with: :money_format
-        expose :sent_money, format_with: :money_format
-        expose :left_money, format_with: :money_format
-        expose :min_value, format_with: :money_format
-        expose :max_value, format_with: :money_format
       end
       
       class QuizRule < Base
@@ -284,369 +251,7 @@ module API
         end
         expose :created_at, as: :time, format_with: :month_date_time
       end
-      
-      class SignRule < Base
-        expose :name do |model, opts|
-          '口令红包'
-        end
-        expose :action do |model, opts|
-          '提交口令，抢红包'
-        end
-        expose :answer_from_tip, as: :grab_tip
-      end
-      
-      class SharePoster < Base
-        expose :name do |model, opts|
-          '分享红包'
-        end
-        expose :action do |model, opts|
-          '提交分享，抢红包'
-        end
-        expose :grab_tip do |model, opts|
-          '长按下图发送给朋友或保存到手机发朋友圈，好友识别二维码抢红包，您得分享红包。'
-        end
-        # expose :share_image
-        # expose :answer_fsrom_tip, as: :grab_tip
-      end
-      
-      class LocationCheckin < Base
-        expose :name do |model, opts|
-          '签到抢红包'
-        end
-        expose :action do |model, opts|
-          '签到抢红包'
-        end
-        expose :address
-        expose :accuracy
-      end
-      
-      class EventOwner < Base
-        expose :id do |model, opts|
-          model.try(:uid) || model.id
-        end
-        expose :type do |model, opts|
-          if model.class.to_s == 'Admin'
-            ''
-          else
-            model.class.to_s
-          end
-        end
-        expose :nickname do |model, opts|
-          if model.class.to_s == 'Admin'
-            '系统'
-          elsif model.class.to_s == 'User'
-            model.try(:format_nickname) || ''
-          else 
-            '未知'
-          end
-        end
-        expose :avatar do |model, opts|
-          if model.class.to_s == 'Admin'
-            ''
-          elsif model.class.to_s == 'User'
-            model.real_avatar_url
-          else 
-            ''
-          end
-        end
-      end
-      
-      class RedbagOwner < Base
-        expose :id do |model, opts|
-          model.try(:uid) || model.id
-        end
-        expose :type do |model, opts|
-          if model.class.to_s == 'Admin'
-            ''
-          else
-            model.class.to_s
-          end
-        end
-        expose :nickname do |model, opts|
-          model.try(:format_nickname) || '未知'
-        end
-        expose :avatar do |model, opts|
-          if model.class.to_s == 'Admin'
-            CommonConfig.offical_app_icon || ''
-          elsif model.class.to_s == 'User'
-            model.real_avatar_url
-          else 
-            ''
-          end
-        end
-      end
-      
-      class SimpleRedbag < Base
-         expose :uniq_id, as: :id
-         expose :total_money, format_with: :money_format
-         expose :sent_money, format_with: :money_format
-         expose :left_money, format_with: :money_format
-         expose :min_value, format_with: :money_format
-         expose :max_value, format_with: :money_format
-      end
-      
-      class Redbag < Base
-        expose :uniq_id, as: :id
-        expose :title
-        expose :use_type
-        expose :image do |model, opts|
-          model.icon_image
-        end
-        expose :cover_image do |model, opts|
-          model.cover_image
-        end
-        expose :ownerable, as: :owner, using: API::V1::Entities::RedbagOwner, if: proc { |e| e.ownerable.present? }
-        expose :rule_type do |model, opts| 
-          if model.ruleable_type == 'Question'
-            'quiz'
-          elsif model.ruleable_type == 'LocationCheckin'
-            'checkin'
-          elsif model.ruleable_type == 'SignRule'
-            'sign'
-          elsif model.ruleable_type == 'SharePoster'
-            'poster'
-          else
-            ''
-          end
-        end
-        expose :grab_time do |model, opts|
-          if model.started_at.blank?
-            ""
-          else
-            model.started_at.strftime('%Y-%m-%d %H:%M')
-          end
-        end
-        expose :grabed do |model, opts|
-          model.grabed_with_opts(opts)
-        end
-        expose :distance do |model, opts|
-          model.try(:distance) || ''
-        end
-        expose :lat do |model, opts|
-          model.location ? model.location.y : 0
-        end
-        expose :lng do |model, opts|
-          model.location ? model.location.x : 0
-        end
-        expose :type do |model, opts|
-          model._type
-        end
-        expose :has_shb do |model, opts|
-          model.share_hb_id.present?
-        end
-        expose :opened
-        expose :view_count, :share_count, :likes_count
-        expose :sent_count do |model, opts|
-          model.total_sent_count
-        end
-        expose :total_money, format_with: :money_format
-        expose :sent_money, format_with: :money_format
-        expose :left_money, format_with: :money_format
-        expose :min_value, format_with: :money_format
-        expose :max_value, format_with: :money_format
-        expose :created_at, as: :time, format_with: :chinese_datetime
-        expose :state_name do |model, opts|
-          model.opened ? '已上架' : '未上架'
-        end
-        expose :state do |model, opts|
-          model.opened ? 1 : 0
-        end
-      end
-      
-      class MyRedbag < Redbag
-        expose :share_hb, as: :shb, using: API::V1::Entities::SimpleRedbag, if: proc { |hb| hb.share_hb.present? }
-      end
-      
-      # 红包详情
-      class RedbagDetail < Redbag
-        unexpose :distance
-        expose :disable_text do |model, opts|
-          model.disable_text_with_opts(opts)
-        end
-        # expose :view_count, :share_count, :likes_count, :sent_hb_count
-        expose :body do |model, opts|
-          if model.hbable
-            model.hbable.try(:body) || ''
-          else
-            ''
-          end
-        end
-        # expose :body_url, format_with: :null
-        expose :rule, if: proc { |e| e.ruleable.present? } do |model, opts|
-          if model.ruleable_type == 'Question'
-            API::V1::Entities::Question.represent model.ruleable
-          elsif model.ruleable_type == 'LocationCheckin'
-            API::V1::Entities::LocationCheckin.represent model.ruleable
-          elsif model.ruleable_type == 'SignRule'
-            API::V1::Entities::SignRule.represent model.ruleable
-          elsif model.ruleable_type == 'SharePoster'
-            API::V1::Entities::SharePoster.represent model.ruleable
-          else
-            {}
-          end
-        end
-        
-        expose :share_poster_url, if: proc { |e| e.ruleable_type == 'SharePoster' } do |model, opts|
-          model.share_poster_image(opts)
-        end
-        
-      end
-      
-      class Card < Base
-        expose :uniq_id, as: :id
-        expose :title
-        expose :image do |model, opts|
-          model.image.blank? ? '' : model.image.url(:large)
-        end
-        expose :view_count, :share_count, :use_count, :sent_count, :quantity
-        expose :body
-        expose :created_at, as: :time, format_with: :chinese_datetime
-        expose :expire_desc do |model, opts|
-          '自领取之日起30天内有效'
-        end
-      end
-      
-      class UserCard < Base
-        expose :uniq_id, as: :id
-        expose :title
-        expose :image do |model, opts|
-          model.image.blank? ? '' : model.image.url(:large)
-        end
-        expose :body_url
-        expose :expired_at, as: :expire_time, format_with: :chinese_date
-        expose :get_time, format_with: :chinese_datetime
-        expose :created_at, as: :time, format_with: :chinese_datetime
-      end
-      
-      class SimpleUserCard < Base
-        expose :uniq_id, as: :id
-        expose :title
-        expose :get_time, format_with: :chinese_datetime
-        expose :used_at, as: :use_time, format_with: :chinese_datetime
-        expose :user, using: API::V1::Entities::SimpleUser
-      end
-      
-      class RedbagEarnLog < Base
-        expose :uniq_id, as: :id
-        expose :money, format_with: :money_format
-        expose :user, using: API::V1::Entities::UserProfile
-        expose :redbag, as: :hb, using: API::V1::Entities::Redbag
-        expose :user_card, as: :card, using: API::V1::Entities::UserCard, if: proc { |e| e.user_card.present? }
-        expose :created_at, as: :time, format_with: :chinese_datetime
-      end
-      
-      # 抽奖
-      class LuckyDraw < Base
-        expose :uniq_id, as: :id
-        expose :title
-        expose :image do |model, opts|
-          model.image.blank? ? '' : model.image.url(:large)
-        end
-        expose :view_count, :share_count, :draw_count
-        expose :user_prized_count do |model, opts|
-          model.user_prized_count(opts)
-        end
-      end
-      
-      class LuckyDrawDetail < LuckyDraw
-        expose :ownerable, as: :owner, using: API::V1::Entities::RedbagOwner, if: proc { |e| e.ownerable.present? }
-        expose :plate_image do |model, opts|
-          model.plate_image.url
-        end
-        expose :prize_desc, format_with: :null
-        expose :arrow_image do |model, opts|
-          model.real_arrow_image_url
-        end
-        expose :bg_image do |model, opts|
-          model.real_background_image_url
-        end
-      end
-      
-      class LuckyDrawItem < Base
-        expose :uniq_id, as: :id
-        expose :name, :angle
-        expose :count do |model, opts|
-          (model.quantity || 0).to_i
-        end
-        expose :sent_count
-        expose :is_virtual_goods, as: :is_vg
-        expose :description, as: :desc
-      end
-      
-      class LuckyDrawPrizeLog < Base
-        expose :uniq_id, as: :id
-        expose :prize, using: API::V1::Entities::LuckyDrawItem
-        expose :user, using: API::V1::Entities::UserProfile
-        expose :lucky_draw, as: :prize_event, using: API::V1::Entities::LuckyDraw
-        expose :created_at, as: :time, format_with: :chinese_datetime
-      end
-      
-      # 积分墙渠道
-      class OfferwallChannel < Base
-        expose :uniq_id, as: :id
-        expose :name
-        expose :icon do |model, opts|
-          model.icon.blank? ? '' : model.icon.url(:big)
-        end
-        expose :earn_desc do |model, opts|
-          '100积分=1元'
-        end
-        expose :task_url do |model, opts|
-          if opts && opts[:opts]
-            user = opts[:opts][:user]
-            "#{model.task_url}#{Offerwall.send(model.req_sig_method.to_sym, model, user.wechat_profile.openid)}"
-          else
-            model.task_url
-          end
-        end
-      end
-      
-      # 活动
-      class Event < Base
-        expose :uniq_id, as: :id
-        expose :title
-        expose :image do |model, opts|
-          model.image.url(:small)
-        end
-        expose :ownerable, as: :owner, using: API::V1::Entities::EventOwner, if: proc { |e| e.ownerable.present? }
-        expose :current_hb, as: :hb, using: API::V1::Entities::Hongbao, if: proc { |e| e.current_hb.present? }
-        expose :share_hb, using: API::V1::Entities::Hongbao, if: proc { |e| e.share_hb_id.present? }
-        expose :lat do |model, opts|
-          model.location ? model.location.y : 0
-        end
-        expose :lng do |model, opts|
-          model.location ? model.location.x : 0
-        end
-        expose :distance do |model, opts|
-          model.try(:distance) || ''
-        end
-        expose :rule_type do |model, opts|
-          model.ruleable_type
-        end
-        expose :grab_time do |model, opts|
-          if model.started_at.blank?
-            ""
-          else
-            model.started_at.strftime('%Y-%m-%d %H:%M')
-          end
-        end
-        expose :grabed do |model, opts|
-          model.grabed_with_opts(opts)
-        end
-        expose :state
-        expose :state_name
-        expose :view_count, :share_count, :likes_count, :sent_hb_count
-        expose :created_at, as: :time, format_with: :chinese_datetime
-      end
-      
-      class EventEarnLog < Base
-        expose :uniq_id, as: :id
-        expose :money, format_with: :money_format
-        expose :user, using: API::V1::Entities::UserProfile
-        expose :event, using: API::V1::Entities::Event
-        expose :created_at, as: :time, format_with: :chinese_datetime
-      end
-      
+            
       class TradeLog < Base
         expose :uniq_id, as: :id, format_with: :null
         expose :title
@@ -713,6 +318,11 @@ module API
             false
           end
         end
+      end
+      
+      class Like < Base
+        expose :likeable, using: API::V1::Entities::Media, if: proc { |o| o.likeable_type == 'Media' }
+        expose :created_at, as: :time, format_with: :chinese_datetime
       end
       
       # 供应商

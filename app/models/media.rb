@@ -46,4 +46,13 @@ class Media < ActiveRecord::Base
     Qiniu::Auth.authorize_download_url(origin_file_url)
   end
   
+  def change_likes_count!(counter)
+    self.likes_count += counter
+    if self.likes_count < 0
+      self.likes_count = 0
+    end
+    s
+    self.save!
+  end
+  
 end

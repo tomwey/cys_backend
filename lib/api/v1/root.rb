@@ -39,6 +39,7 @@ module API
       # mount API::V1::CatalogsAPI
       mount API::V1::PayAPI
       mount API::V1::UtilsAPI
+      mount API::V1::LikesAPI
       # mount API::V1::UsersAPI
       # mount API::V1::BannersAPI
       # mount API::V1::MediaAPI
