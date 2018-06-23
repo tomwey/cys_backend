@@ -322,6 +322,11 @@ module API
         
       end
       
+      class MediaPlayLog < Base
+        expose :created_at, as: :time,format_with: :chinese_datetime
+        expose :media, using: API::V1::Entities::Media
+      end
+      
       class Like < Base
         expose :likeable, using: API::V1::Entities::Media, if: proc { |o| o.likeable_type == 'Media' }
         expose :created_at, as: :time, format_with: :chinese_datetime
