@@ -340,6 +340,18 @@ module API
         expose :address
       end
       
+      class Reply < Base
+        expose :content
+        expose :from_user, using: API::V1::Entities::User
+        expose :to_user, using: API::V1::Entities::User
+        expose :created_at, as: :time, format_with: :chinese_datetime
+        expose :ip
+        expose :address
+        expose :comment_id do |model,opts|
+          model.comment.try(:id)
+        end
+      end
+      
       # 供应商
       class Merchant < Base
         expose :merch_id, as: :id
