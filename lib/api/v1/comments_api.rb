@@ -14,13 +14,14 @@ module API
           use :pagination
         end
         get do
-          @comments = Comment.where(opened: true).where(commentable_type: params[:comment_type], commentable_id: params[:commentable_id]).order('created_at desc')
+          @comments = Comment.where(opened: true).where(commentable_type: params[:comment_type], commentable_id: params[:comment_id]).order('created_at desc')
           if params[:page]
             @comments = @comments.paginate page: params[:page], per_page: page_size
             total = @comments.total_entries
           else
             total = @comments.size
           end
+          
           render_json(@comments, API::V1::Entities::Comment, {}, total)
           
         end # end get /
