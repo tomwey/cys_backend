@@ -51,7 +51,7 @@ class Media < ActiveRecord::Base
     if self.likes_count < 0
       self.likes_count = 0
     end
-    s
+    
     self.save!
   end
   
