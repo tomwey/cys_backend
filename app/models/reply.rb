@@ -1,7 +1,7 @@
 class Reply < ActiveRecord::Base
   belongs_to :comment
   after_create :increment_reply_count
-  def increment_reply_counts
+  def increment_reply_count
     if comment
       comment.reply_count += 1
       comment.save!
