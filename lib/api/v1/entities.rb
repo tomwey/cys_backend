@@ -337,7 +337,7 @@ module API
         expose :user, using: API::V1::Entities::User
         expose :created_at, as: :time, format_with: :chinese_datetime
         expose :ip
-        expose :location_str, as: :location
+        expose :address
       end
       
       # 供应商
