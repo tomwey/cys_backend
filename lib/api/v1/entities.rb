@@ -332,14 +332,6 @@ module API
         expose :created_at, as: :time, format_with: :chinese_datetime
       end
       
-      class Comment < Base
-        expose :content
-        expose :user, using: API::V1::Entities::User
-        expose :created_at, as: :time, format_with: :chinese_datetime
-        expose :ip
-        expose :address
-      end
-      
       class Reply < Base
         expose :content
         expose :from_user, using: API::V1::Entities::User
@@ -347,9 +339,16 @@ module API
         expose :created_at, as: :time, format_with: :chinese_datetime
         expose :ip
         expose :address
-        expose :comment_id do |model,opts|
-          model.comment.try(:id)
-        end
+        expose :comment_id
+      end
+      
+      class Comment < Base
+        expose :content
+        expose :user, using: API::V1::Entities::User
+        expose :created_at, as: :time, format_with: :chinese_datetime
+        expose :ip
+        expose :address
+        expose :replies, using: API::V1::Entities::Reply
       end
       
       # 供应商

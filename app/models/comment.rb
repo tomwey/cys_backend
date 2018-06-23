@@ -1,4 +1,6 @@
 class Comment < ActiveRecord::Base
+  has_many :replies, dependent: :destroy
+  
   after_create :increment_comments_count
   def increment_comments_count
     if commentable
