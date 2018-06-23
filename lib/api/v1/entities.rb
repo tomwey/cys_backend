@@ -332,6 +332,14 @@ module API
         expose :created_at, as: :time, format_with: :chinese_datetime
       end
       
+      class Comment < Base
+        expose :content
+        expose :user, using: API::V1::Entities::User
+        expose :created_at, as: :time, format_with: :chinese_datetime
+        expose :ip
+        expose :location_str, as: :location
+      end
+      
       # 供应商
       class Merchant < Base
         expose :merch_id, as: :id

@@ -25,7 +25,7 @@ module API
             total = @likes.size
           end
           
-          render_json(@likes, API::V1::Entities::Like)
+          render_json(@likes, API::V1::Entities::Like, {}, total)
           
         end # end get /
         
