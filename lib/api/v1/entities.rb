@@ -307,9 +307,6 @@ module API
         expose :duration
         expose :views_count, :likes_count, :comments_count, :danmu_count
         expose :owner, using: API::V1::Entities::Performer
-      end
-      
-      class MediaDetail < Media
         expose :liked do |model,opts|
           if opts and opts[:opts] and opts[:opts][:user]
             user = opts[:opts][:user]
@@ -318,6 +315,11 @@ module API
             false
           end
         end
+        
+      end
+      
+      class MediaDetail < Media
+        
       end
       
       class Like < Base
