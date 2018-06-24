@@ -15,7 +15,7 @@ class AttachmentUploader < BaseUploader
   end
   
   def extension_white_list
-    %w(jpg jpeg png webp mp4)
+    %w(jpg jpeg png webp mp4 m4v mov mp3 aac wav)
   end
   
   protected

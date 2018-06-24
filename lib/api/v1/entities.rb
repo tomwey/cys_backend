@@ -96,14 +96,16 @@ module API
       end
       
       class Attachment < Base
-        expose :uniq_id, as: :id
-        expose :content_type do |model, opts|
+        # expose :uniq_id, as: :id
+        expose :data_file_name, as: :file_name
+        expose :data_file_size, as: :file_size
+        expose :file_type do |model, opts|
           model.data.content_type
         end
         expose :url do |model, opts|
           model.data.url
         end
-        expose :width, :height
+        # expose :width, :height
       end
       
       class QuizRule < Base
@@ -349,6 +351,33 @@ module API
         expose :ip
         expose :address
         expose :replies, using: API::V1::Entities::Reply
+      end
+      
+      class Ownerable < Base
+        expose :comm_id, as: :id
+        expose :comm_name, as: :name
+        expose :avatar
+        expose :comm_type, as: :type
+      end
+      
+      class Topic < Base
+        expose :uniq_id, as: :id
+        expose :content
+        expose :views_count, :likes_count, :comments_count
+        expose :owner, using: API::V1::Entities::Ownerable
+        expose :attachment_type, as: :type
+        expose :files, using: API::V1::Entities::Attachment
+        expose :topicable, as: :media, using: API::V1::Entities::Media, if: proc { |o| o.topicable_type && o.topicable_type == 'Media' }
+        expose :created_at, as: :time, format_with: :chinese_datetime
+        expose :liked do |model,opts|
+          if opts and opts[:opts] and opts[:opts][:user]
+            user = opts[:opts][:user]
+            user.liked?(model)
+          else
+            false
+          end
+        end
+        
       end
       
       # 供应商

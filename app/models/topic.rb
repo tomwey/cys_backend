@@ -1,0 +1,34 @@
+class Topic < ActiveRecord::Base
+  scope :latest,    -> { order('id desc, sort desc') }
+  scope :suggest,   -> { order('sort desc, id desc') }
+  
+  before_create :generate_uniq_id
+  def generate_uniq_id
+    begin
+      n = rand(10)
+      if n == 0
+        n = 8
+      end
+      self.uniq_id = (n.to_s + SecureRandom.random_number.to_s[2..8]).to_i
+    end while self.class.exists?(:uniq_id => uniq_id)
+  end
+  
+  def self.following_for(user)
+    joins('inner join follows on topics.ownerable_type = follows.followable_type and topics.ownerable_id = follows.followable_id').where('follows.user_id = ?', user.uid)
+  end
+  
+  def owner
+    klass = Object.const_get self.ownerable_type
+    @owner ||= klass.where('uid = :id or uniq_id = :id', { id: self.ownerable_id }).first
+  end
+  
+  def topicable
+    klass = Object.const_get self.topicable_type
+    @topicable ||= klass.where('id = :id or uniq_id = :id', { id: self.topicable_id }).first
+  end
+  
+  def files
+    @files ||= Attachment.where(opened: true).where(attachable_type: self.class, attachable_id: self.uniq_id).order('id asc')
+  end
+  
+end

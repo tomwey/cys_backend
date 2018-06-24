@@ -14,4 +14,16 @@ class Performer < ActiveRecord::Base
     self.private_token = SecureRandom.uuid.gsub('-', '')
   end
   
+  def comm_id
+    self.uniq_id
+  end
+  
+  def comm_name
+    self.name
+  end
+  
+  def comm_type
+    'performer'
+  end
+  
 end
