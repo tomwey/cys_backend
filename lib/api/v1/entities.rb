@@ -317,6 +317,7 @@ module API
             false
           end
         end
+        expose :created_at, as: :time,format_with: :chinese_datetime
         
       end
       
