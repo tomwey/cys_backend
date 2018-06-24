@@ -357,7 +357,9 @@ module API
       class Ownerable < Base
         expose :comm_id, as: :id
         expose :comm_name, as: :name
-        expose :avatar
+        expose :avatar do |model, opts|
+          model.format_avatar_url
+        end
         expose :comm_type, as: :type
       end
       

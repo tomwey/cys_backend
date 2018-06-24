@@ -26,4 +26,12 @@ class Performer < ActiveRecord::Base
     'performer'
   end
   
+  def format_avatar_url
+    if self.avatar.blank?
+      ''
+    else
+      self.avatar.url(:large)
+    end
+  end
+  
 end
