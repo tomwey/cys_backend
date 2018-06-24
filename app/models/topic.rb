@@ -17,6 +17,15 @@ class Topic < ActiveRecord::Base
     joins('inner join follows on topics.ownerable_type = follows.followable_type and topics.ownerable_id = follows.followable_id').where('follows.user_id = ?', user.uid)
   end
   
+  def change_likes_count!(counter)
+    self.likes_count += counter
+    if self.likes_count < 0
+      self.likes_count = 0
+    end
+    
+    self.save!
+  end
+  
   def owner
     klass = Object.const_get self.ownerable_type
     if self.ownerable_type == 'User'
