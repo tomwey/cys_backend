@@ -49,9 +49,11 @@ module API
             return render_error(1001, '已经喜欢过了')
           end
           
-          Like.create!(user_id: user.uid, likeable_type: @likeable.class, likeable_id: @likeable.uniq_id || @likeable.id)
+          like = Like.create!(user_id: user.uid, likeable_type: @likeable.class, likeable_id: @likeable.uniq_id || @likeable.id)
           
-          render_json_no_data
+          # render_json_no_data
+          
+          render_json(like, API::V1::Entities::Like)
           
         end # end like create
         
