@@ -380,6 +380,7 @@ module API
             false
           end
         end
+        expose :liked_users, using: API::V1::Entities::User
         
       end
       

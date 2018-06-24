@@ -26,6 +26,12 @@ class Topic < ActiveRecord::Base
     self.save!
   end
   
+  def liked_users
+    @ids = Like.where(likeable_type: self.class, likeable_id: self.uniq_id).pluck(:user_id)
+    @users ||= User.where(uid: @ids)
+    return @users
+  end
+  
   def owner
     klass = Object.const_get self.ownerable_type
     if self.ownerable_type == 'User'
