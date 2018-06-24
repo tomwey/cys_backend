@@ -27,7 +27,7 @@ class Topic < ActiveRecord::Base
   end
   
   def liked_users
-    @ids = Like.where(likeable_type: self.class, likeable_id: self.uniq_id).pluck(:user_id)
+    @ids = Like.where(likeable_type: self.class, likeable_id: self.uniq_id).order('id desc').pluck(:user_id)
     @users ||= User.where(uid: @ids)
     return @users
   end
