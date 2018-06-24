@@ -40,6 +40,17 @@ class Media < ActiveRecord::Base
     self._type = 2
   end
   
+  after_create :create_topic
+  def create_topic
+    Topic.create!(content: '我发布了MV视频', 
+                  topicable_type: self.class, 
+                  topicable_id: self.uniq_id,
+                  ownerable_type: 'Performer',
+                  ownerable_id: self.owner_id,
+                  attachment_type: 0 
+                  )
+  end
+  
   def media_file_url
     return '' if self.file.blank?
     origin_file_url = 'http://' + SiteConfig.qiniu_bucket_domain + "/uploads/media/" + self.file
