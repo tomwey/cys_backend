@@ -19,7 +19,14 @@ class Topic < ActiveRecord::Base
   
   def owner
     klass = Object.const_get self.ownerable_type
-    @owner ||= klass.where('uid = :id or uniq_id = :id', { id: self.ownerable_id }).first
+    if self.ownerable_type == 'User'
+      @owner2 ||= User.find_by(uid: self.ownerable_id)
+      return @owner2
+    else
+      @owner ||= klass.where('uniq_id = :id or id = :id', { id: self.ownerable_id }).first
+      return @owner
+    end
+    
   end
   
   def topicable
