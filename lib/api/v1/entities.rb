@@ -98,7 +98,9 @@ module API
       class Attachment < Base
         # expose :uniq_id, as: :id
         expose :data_file_name, as: :file_name
-        expose :data_file_size, as: :file_size
+        expose :file_size do |model, opts|
+          model.data ? model.data.file.size : 0
+        end
         expose :file_type do |model, opts|
           model.data.content_type
         end
