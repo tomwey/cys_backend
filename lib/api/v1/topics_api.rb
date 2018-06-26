@@ -34,8 +34,9 @@ module API
                                 ownerable_type: user.class,
                                 ownerable_id: user.uid
                                 )
-                                
-          params[:files].each do |param|
+          
+          files = params[:files] || []   
+          files.each do |param|
             Attachment.create!(data: param[:file], 
                                ownerable_type: user.class, 
                                ownerable_id: user.uid,
