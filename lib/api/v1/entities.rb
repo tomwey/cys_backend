@@ -384,6 +384,7 @@ module API
           end
         end
         expose :liked_users, using: API::V1::Entities::User
+        expose :latest_comments, using: API::V1::Entities::Comment
         
       end
       

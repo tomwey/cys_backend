@@ -32,6 +32,11 @@ class Topic < ActiveRecord::Base
     return @users
   end
   
+  def latest_comments
+    @comments ||= Comment.where(opened: true).where(commentable_type: self.class, commentable_id: self.uniq_id).order('id desc').limit(5)
+    return @comments
+  end
+  
   def owner
     klass = Object.const_get self.ownerable_type
     if self.ownerable_type == 'User'
