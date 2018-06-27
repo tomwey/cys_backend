@@ -284,15 +284,19 @@ module API
       end
       
       class VoteItem < Base
+        expose :uniq_id, as: :id
         expose :perform, using: API::V1::Entities::Performer
         expose :vote_count
         expose :percent
+        expose :video_url
+        expose :body
       end
       
       class Vote < Base
         expose :uniq_id, as: :id
         expose :title
         expose :body
+        expose :video_url
         expose :body_url
         expose :_type, as: :type
         expose :vote_count

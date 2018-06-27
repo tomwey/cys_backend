@@ -25,4 +25,10 @@ class VoteItem < ActiveRecord::Base
     num.to_s
   end
   
+  def video_url
+    return '' if self.video.blank?
+    origin_file_url = 'http://' + SiteConfig.qiniu_bucket_domain + "/uploads/vote_items/" + self.video
+    Qiniu::Auth.authorize_download_url(origin_file_url)
+  end
+  
 end
