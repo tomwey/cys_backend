@@ -264,10 +264,16 @@
         _type: '投票类型'
         vote_count: '总投票数'
         sort: '显示顺序'
+        video: '投票简介视频'
+        view_count: '阅读量'
       vote_item:
         vote_id: '所属投票'
         performer_id: '候选艺人'
         vote_count: '得票数'
+        sort: '显示顺序'
+        video: '投票视频介绍'
+        opened: '是否启用该选项'
+        body: '投票文本介绍'
     errors:
       models:
         user: "用户"
