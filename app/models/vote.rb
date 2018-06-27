@@ -2,8 +2,10 @@ class Vote < ActiveRecord::Base
   validates :title, :expired_at, presence: true
   
   has_many :vote_items, dependent: :destroy
-  accepts_nested_attributes_for :vote_items, allow_destroy: true, 
-    reject_if: proc { |o| o[:performer_id].blank? }
+  # accepts_nested_attributes_for :vote_items, allow_destroy: true,
+  #   reject_if: proc { |o| o[:performer_id].blank? }
+  
+    # mount_uploaders :videos, 
   
   before_create :generate_uniq_id
   def generate_uniq_id
@@ -16,12 +18,18 @@ class Vote < ActiveRecord::Base
     end while self.class.exists?(:uniq_id => uniq_id)
   end
   
-  validate :check_vote_items
-  def check_vote_items
-    if vote_items.empty?
-      errors.add(:base, '至少需要一个填入一个投票选项')
-      return false
-    end
+  def video_url
+    return '' if self.video.blank?
+    origin_file_url = 'http://' + SiteConfig.qiniu_bucket_domain + "/uploads/votes/" + self.video
+    Qiniu::Auth.authorize_download_url(origin_file_url)
   end
+  
+  # validate :check_vote_items
+  # def check_vote_items
+  #   if vote_items.empty?
+  #     errors.add(:base, '至少需要一个填入一个投票选项')
+  #     return false
+  #   end
+  # end
   
 end
