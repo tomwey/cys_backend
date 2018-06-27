@@ -1,7 +1,7 @@
 class Vote < ActiveRecord::Base
   validates :title, :expired_at, presence: true
   
-  has_many :vote_items, dependent: :destroy
+  has_many :vote_items, -> { order('sort asc, id desc') }, dependent: :destroy
   # accepts_nested_attributes_for :vote_items, allow_destroy: true,
   #   reject_if: proc { |o| o[:performer_id].blank? }
   

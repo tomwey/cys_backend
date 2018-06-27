@@ -302,6 +302,7 @@ module API
         expose :vote_count
         expose :expired_at, as: :expire_time, format_with: :month_date_time
         expose :vote_items, using: API::V1::Entities::VoteItem
+        expose :created_at, as: :time, format_with: :chinese_datetime
       end
       
       class Media < Base
