@@ -63,7 +63,7 @@ module API
         params do
           optional :token, type: String, desc: '用户TOKEN'
           optional :school, type: String, desc: '艺人学校'
-          use: pagination
+          use :pagination
         end
         get do
           @performers = Performer.where(verified: true).order('id desc')
