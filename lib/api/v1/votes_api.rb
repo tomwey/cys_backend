@@ -41,7 +41,7 @@ module API
                               address: params[:address]
                               )
                               
-          render_json(@vote, API::V1::Entities::Vote)
+          render_json(@vote, API::V1::Entities::Vote, { user: User.find_by(private_token: params[:token]) })
         end # end post view
         
         desc "用户投票"
