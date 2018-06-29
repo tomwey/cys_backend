@@ -43,6 +43,7 @@ module API
       mount API::V1::CommentsAPI
       mount API::V1::TopicsAPI
       mount API::V1::VotesAPI
+      mount API::V1::FollowsAPI
       # mount API::V1::UsersAPI
       # mount API::V1::BannersAPI
       # mount API::V1::MediaAPI

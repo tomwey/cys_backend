@@ -3,62 +3,66 @@ module API
     class FollowsAPI < Grape::API
       
       helpers API::SharedParams
-      resource :follows, desc: '关注商家接口' do
-        desc "我的关注"
+      
+      resource :follows, desc: '关注相关的接口' do
+        desc "获取粉丝"
+        params do
+          requires :owner_type, type: String, desc: '粉丝所有者的类型，user或performer'
+          requires :owner_id, type: Integer, desc: '粉丝所有者ID'
+          use :pagination
+        end
+        get :users do
+          unless %w(user performer).include? params[:owner_type]
+            return render_error(-1, '不正确的owner_type参数')
+          end
+          
+          ids = Follow.where(followable_type: params[:owner_type].capitalize, followable_id: params[:owner_id]).order('id desc').pluck(:user_id)
+          @users = User.where(verified: true, uid: ids)
+          if params[:page]
+            @users = @users.paginate params[:page], per_page: page_size
+            total = @users.total_entries
+          else
+            total = @users.size
+          end
+          render_json(@users, API::V1::Entities::User)
+        end # end get users
+        
+        desc "关注/取消关注"
         params do
           requires :token, type: String, desc: '用户TOKEN'
+          requires :follow_type, type: String, desc: '被关注的对象类型，值为User或Performer'
+          requires :follow_id,   type: Integer, desc: '被关注的对象ID'
+          requires :action, type: String, desc: '关注或取消关注，值为：create或delete'
         end
-        get do
-          user = authenticate!
-          @merchants = user.followed_merchants.where(verified: true).order('follows.id desc')
-          render_json(@merchants, API::V1::Entities::Merchant)
-        end # end get
-        
-        desc "关注商家"
-        params do
-          requires :token,    type: String, desc: '用户TOKEN'
-          requires :merch_id, type: Integer, desc: '商家ID'
-        end
-        post do
+        post '/:action' do
           user = authenticate!
           
-          @merchant = Merchant.find_by(merch_id: params[:merch_id])
-          if @merchant.blank?
-            return render_error(4004, '商家不存在')
+          unless %w(create delete).include? params[:action]
+            return render_error(-1, '不正确的action参数')
           end
           
-          if user.followed?(@merchant)
-            return render_error(3001, '您已经关注过该商家，不能重复关注')
+          unless %w(User Performer).include? params[:follow_type]
+            return render_error(-1, '不正确的follow_type参数')
           end
           
-          user.follow!(@merchant)
+          count = Follow.where(user_id: user.uid, followable_type: params[:follow_type], followable_id: params[:follow_id]).count
+          if params[:action] == 'create'
+            if count > 0
+              return render_error(5001, '你已经关注了')
+            end
+          else
+            if count == 0
+              return render_error(5001, '还未关注，不能取消')
+            end
+          end
+          
+          counter = params[:action] == 'create' ? 1 : -1
+          
+          follow = Follow.create!(user_id: user.uid, followable_type: params[:follow_type], followable_id: params[:follow_id])
+          follow.change_stats!(counter)
           
           render_json_no_data
-          
-        end # end post
-        
-        desc "取消关注商家"
-        params do
-          requires :token,    type: String, desc: '用户TOKEN'
-          # requires :merch_id, type: Integer, desc: '商家ID'
-        end
-        post '/:merch_id/cancel' do
-          user = authenticate!
-          
-          @merchant = Merchant.find_by(merch_id: params[:merch_id])
-          if @merchant.blank?
-            return render_error(4004, '商家不存在')
-          end
-          
-          unless user.followed?(@merchant)
-            return render_error(3001, '您还未关注该商家，不能取消关注')
-          end
-          
-          user.unfollow!(@merchant)
-          
-          render_json_no_data
-          
-        end # end post
+        end # end post action
         
       end # end resource
       

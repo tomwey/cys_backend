@@ -53,7 +53,9 @@ class User < ActiveRecord::Base
   end
   
   def followed?(followable)
-    return false
+    return false if followable.blank?
+    
+    Follow.where(user_id: self.uid, followable_type: followable.class, followable_id: followable.uid || followable.uniq_id || followable.id).count > 0
   end
   
   def open_redpack(hb)
