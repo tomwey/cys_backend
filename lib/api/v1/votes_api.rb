@@ -68,7 +68,7 @@ module API
           end
           
           answers = params[:answers].split(',')
-          ids = VoteItem.where(vote_id: @vote.uniq_id, uniq_id: answers).pluck(:uniq_id)
+          ids = VoteItem.where(vote_id: @vote.id, uniq_id: answers).pluck(:uniq_id)
           if ids.empty?
             return render_error(3003, '投票选项不存在')
           end
