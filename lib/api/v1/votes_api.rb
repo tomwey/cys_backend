@@ -41,7 +41,7 @@ module API
                               address: params[:address]
                               )
                               
-          render_json_no_data
+          render_json(@vote, API::V1::Entities::Vote)
         end # end post view
         
         desc "用户投票"
