@@ -304,8 +304,10 @@ module API
         expose :vote_items, using: API::V1::Entities::VoteItem
         expose :created_at, as: :time, format_with: :chinese_datetime
         expose :liked do |model, opts|
+          puts opts
           if opts and opts[:opts] and opts[:opts][:user]
             user = opts[:opts][:user]
+            puts user
             user.liked?(model)
           else
             false

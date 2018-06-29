@@ -47,6 +47,11 @@ class User < ActiveRecord::Base
     end
   end
   
+  def voted?(vote)
+    return false if vote.blank?
+    UserVoteLog.where(user_id: self.uid, vote_id: vote.uniq_id).count > 0
+  end
+  
   def open_redpack(hb)
     if hb.is_cash?
       # 现金红包如果还没被抢完，那么重新开启红包，会从用户余额扣除来支付该红包剩下的费用

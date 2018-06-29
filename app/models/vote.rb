@@ -33,6 +33,10 @@ class Vote < ActiveRecord::Base
     self.save!
   end
   
+  def expired?
+    self.expired_at < Time.zone.now
+  end
+  
   # validate :check_vote_items
   # def check_vote_items
   #   if vote_items.empty?
