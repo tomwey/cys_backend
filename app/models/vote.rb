@@ -24,6 +24,15 @@ class Vote < ActiveRecord::Base
     Qiniu::Auth.authorize_download_url(origin_file_url)
   end
   
+  def change_likes_count!(counter)
+    self.likes_count += counter
+    if self.likes_count < 0
+      self.likes_count = 0
+    end
+    
+    self.save!
+  end
+  
   # validate :check_vote_items
   # def check_vote_items
   #   if vote_items.empty?
