@@ -2,6 +2,8 @@ module API
   module V1
     class HomeAPI < Grape::API
       
+      helpers API::SharedParams
+      
       resource :entry, desc: '首页相关接口' do
         desc "获取首页数据接口"
         params do
@@ -54,6 +56,25 @@ module API
           
           { code: 0, message: 'ok', data: result }
         end # end get /
+      end # end resource
+      
+      resource :performs, desc: '艺人相关接口' do
+        desc "获取艺人库"
+        params do
+          optional :token, type: String, desc: '用户TOKEN'
+          optional :school, type: String, desc: '艺人学校'
+          use: pagination
+        end
+        get do
+          @performers = Performer.where(verified: true).order('id desc')
+          if params[:page]
+            @performers = @performers.paginate page: params[:page], per_page: page_size
+            total = @performers.total_entries
+          else
+            total = @performers.size
+          end
+          render_json(@performers, API::V1::Entities::Performer, { user: User.find_by(private_token: params[:token]) }, total)
+        end # get /
       end # end resource
       
     end # end class

@@ -281,6 +281,15 @@ module API
           model.avatar.url(:large)
         end
         expose :school
+        expose :followed do |model, opts|
+          if opts and opts[:opts] and opts[:opts][:user]
+            user = opts[:opts][:user]
+            # puts user
+            user.followed?(model)
+          else
+            false
+          end
+        end
       end
       
       class VoteItem < Base
