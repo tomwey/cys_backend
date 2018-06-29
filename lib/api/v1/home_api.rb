@@ -46,7 +46,7 @@ module API
           
           result = {
             banners: API::V1::Entities::Banner.represent(@banners),
-            vote: API::V1::Entities::Vote.represent(@vote),
+            vote: API::V1::Entities::Vote.represent(@vote, { user: User.find_by(private_token: params[:token]) }),
             featured: @sections,
             sections: @modules,
             performers: API::V1::Entities::Performer.represent(@performers)

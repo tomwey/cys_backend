@@ -303,6 +303,14 @@ module API
         expose :expired_at, as: :expire_time, format_with: :month_date_time
         expose :vote_items, using: API::V1::Entities::VoteItem
         expose :created_at, as: :time, format_with: :chinese_datetime
+        expose :liked do |model, opts|
+          if opts and opts[:opts] and opts[:opts][:user]
+            user = opts[:opts][:user]
+            user.liked?(model)
+          else
+            false
+          end
+        end
       end
       
       class Media < Base
