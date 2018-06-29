@@ -51,7 +51,7 @@ module API
             vote: API::V1::Entities::Vote.represent(@vote, { user: User.find_by(private_token: params[:token]) }),
             featured: @sections,
             sections: @modules,
-            performers: API::V1::Entities::Performer.represent(@performers)
+            performers: API::V1::Entities::Performer.represent(@performers, { user: User.find_by(private_token: params[:token]) })
           }
           
           { code: 0, message: 'ok', data: result }
