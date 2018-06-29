@@ -299,7 +299,7 @@ module API
         expose :video_url
         expose :body_url
         expose :_type, as: :type
-        expose :vote_count
+        expose :vote_count, :comments_count, :view_count
         expose :expired_at, as: :expire_time, format_with: :month_date_time
         expose :vote_items, using: API::V1::Entities::VoteItem
         expose :created_at, as: :time, format_with: :chinese_datetime
