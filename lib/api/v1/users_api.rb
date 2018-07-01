@@ -270,7 +270,7 @@ module API
           
           @follows = Follow.where(user_id: user.uid).order('id desc')
           if params[:page]
-            @follows = @follows.paginate params[:page], per_page: page_size
+            @follows = @follows.paginate page: params[:page], per_page: page_size
             total = @follows.total_entries
           else
             total = @follows.size
