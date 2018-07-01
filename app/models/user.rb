@@ -180,6 +180,10 @@ class User < ActiveRecord::Base
     'user'
   end
   
+  def likes_count
+    Like.where(user_id: self.uid, likeable_type: 'Topic').count
+  end
+  
   def liked?(likeable)
     return false if likeable.blank?
     Like.where(user_id: self.uid, likeable_type: likeable.class, likeable_id: likeable.uniq_id || likeable.id).count > 0

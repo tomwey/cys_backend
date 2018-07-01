@@ -62,6 +62,7 @@ module API
         end
         expose :follows_count
         expose :following_count
+        expose :likes_count
         # expose :balance, format_with: :rmb_format
         # expose :vip_expired_at, as: :vip_time, format_with: :chinese_date
         # expose :left_days, as: :vip_status
