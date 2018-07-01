@@ -20,7 +20,7 @@ module API
           ids = Follow.where(followable_type: params[:owner_type].capitalize, followable_id: params[:owner_id]).order('id desc').pluck(:user_id)
           @users = User.where(verified: true, uid: ids)
           if params[:page]
-            @users = @users.paginate params[:page], per_page: page_size
+            @users = @users.paginate page: params[:page], per_page: page_size
             total = @users.total_entries
           else
             total = @users.size
