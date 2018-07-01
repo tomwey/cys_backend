@@ -9,6 +9,7 @@ module API
         params do
           requires :owner_type, type: String, desc: '粉丝所有者的类型，user或performer'
           requires :owner_id, type: Integer, desc: '粉丝所有者ID'
+          optional :token, type: String, desc: '用户TOKEN'
           use :pagination
         end
         get :users do
@@ -24,7 +25,7 @@ module API
           else
             total = @users.size
           end
-          render_json(@users, API::V1::Entities::User)
+          render_json(@users, API::V1::Entities::User, { user: User.find_by(private_token: params[:token]) }, total)
         end # end get users
         
         desc "关注/取消关注"
