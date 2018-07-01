@@ -19,6 +19,24 @@ module API
           render_json(@logs, API::V1::Entities::MediaPlayLog)
         end # end get histories
         
+        desc "获取某个艺人的MV列表"
+        params do
+          requires :id, type: Integer, desc: '艺人的ID'
+          optional :token, type: String, desc: '用户TOKEN'
+          use :pagination
+        end
+        get :my_list do
+          @medias = Media.opened.where(owner_id: params[:id]).order('id desc')
+          if params[:page]
+            @medias = @medias.paginate page: params[:page], per_page: page_size
+            total = @medias.total_entries
+          else
+            total = @medias.size
+          end
+          
+          render_json(@medias, API::V1::Entities::MediaDetail, { user: User.find_by(private_token: params[:token]) }, total)
+        end #end get owning
+        
         desc "获取MV列表"
         params do
           requires :action, type: String, desc: '值为latest或hot'

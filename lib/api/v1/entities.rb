@@ -60,6 +60,8 @@ module API
         expose :avatar do |model, opts|
           model.format_avatar_url
         end
+        expose :follows_count
+        expose :following_count
         # expose :balance, format_with: :rmb_format
         # expose :vip_expired_at, as: :vip_time, format_with: :chinese_date
         # expose :left_days, as: :vip_status
@@ -281,6 +283,7 @@ module API
           model.avatar.url(:large)
         end
         expose :school
+        expose :follows_count
         expose :followed do |model, opts|
           if opts and opts[:opts] and opts[:opts][:user]
             user = opts[:opts][:user]
@@ -422,6 +425,12 @@ module API
         expose :liked_users, using: API::V1::Entities::User
         expose :latest_comments, using: API::V1::Entities::Comment
         
+      end
+      
+      class Follow < Base
+        expose :user, using: API::V1::Entities::User
+        expose :followable, as: :target, using: API::V1::Entities::Ownerable
+        expose :created_at, as: :time, format_with: :chinese_datetime
       end
       
       # 供应商

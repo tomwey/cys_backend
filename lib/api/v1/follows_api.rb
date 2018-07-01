@@ -4,7 +4,7 @@ module API
       
       helpers API::SharedParams
       
-      resource :follows, desc: '关注相关的接口' do
+      resource :follows, desc: '关注相关的接口' do        
         desc "获取粉丝"
         params do
           requires :owner_type, type: String, desc: '粉丝所有者的类型，user或performer'

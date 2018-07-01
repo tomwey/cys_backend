@@ -260,6 +260,25 @@ module API
           
         end # end vip active
         
+        desc "获取我正在关注的对象"
+        params do
+          requires :token, type: String, desc: '用户TOKEN'
+          use :pagination
+        end
+        get :followings do
+          user = authenticate!
+          
+          @follows = Follow.where(user_id: user.uid).order('id desc')
+          if params[:page]
+            @follows = @follows.paginate params[:page], per_page: page_size
+            total = @follows.total_entries
+          else
+            total = @follows.size
+          end
+          
+          render_json(@follows, API::V1::Entities::Follow, {}, total)
+        end # end get followings
+        
       end # end user resource
       
     end 

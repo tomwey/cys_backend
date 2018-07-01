@@ -53,22 +53,29 @@ module API
         desc "获取动态"
         params do
           optional :token,  type: String,  desc: '用户TOKEN'
-          requires :action, type: String, desc: '动态分类，值为：suggest,latest,following之一'
+          requires :action, type: String, desc: '动态分类，值为：suggest,latest,following,liked,my_list之一'
           use :pagination
         end
         get '/:action' do
           
-          unless %w(suggest latest following).include? params[:action]
+          unless %w(suggest latest following liked my_list).include? params[:action]
             return render_error(-1, '不正确的action参数')
           end
           
           user = User.find_by(private_token: params[:token])
           
-          if params[:action] == 'following'
+          if params[:action] == 'following' or params[:action] == 'liked' or params[:action] == 'my_list'
             if user.blank?
               return render_error(4001, '您还未登录')
             end
-            @topics = Topic.where('topics.opened = ?', true).following_for(user).order('topics.id desc')
+            if params[:action] == 'following'
+              @topics = Topic.where('topics.opened = ?', true).following_for(user).order('topics.id desc')
+            elsif params[:action] == 'liked'
+              @topics = Topic.where('topics.opened = ?', true).liked_for(user).order('topics.id desc')
+            else
+              @topics = Topic.where(opened: true).where(ownerable_type: 'User', ownerable_id: user.uid).order('id desc')
+            end
+            
           else
             @topics = Topic.where(opened: true).send(params[:action].to_sym)
           end

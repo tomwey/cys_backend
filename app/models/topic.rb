@@ -17,6 +17,10 @@ class Topic < ActiveRecord::Base
     joins('inner join follows on topics.ownerable_type = follows.followable_type and topics.ownerable_id = follows.followable_id').where('follows.user_id = ?', user.uid)
   end
   
+  def self.liked_for(user)
+    joins("inner join likes on likes.likeable_type = 'Topic' and likes.likeable_id = topics.uniq_id").where('likes.user_id = ?', user.uid)
+  end
+  
   def change_likes_count!(counter)
     self.likes_count += counter
     if self.likes_count < 0
