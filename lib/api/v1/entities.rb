@@ -286,9 +286,10 @@ module API
         expose :school
         expose :follows_count
         expose :followed do |model, opts|
+          puts opts[:opts]
           if opts and opts[:opts] and opts[:opts][:user]
             user = opts[:opts][:user]
-            # puts user
+            puts user
             user.followed?(model)
           else
             false

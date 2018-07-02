@@ -17,24 +17,24 @@ module API
           # 获取正在进行的投票
           @vote = Vote.where(opened: true).first
           
-          # 获取功能模块
-          @sections = [
-            {
-              id: 1001,
-              title: '艺人库',
-              subtitle: '305位合作艺人'
-            },
-            {
-              id: 1002,
-              title: '梦想基金',
-              subtitle: '已筹得20,000元'
-            },
-            {
-              id: 1003,
-              title: '吉他课堂',
-              subtitle: '不断提升自己'
-            }
-          ]
+          # # 获取功能模块
+          # @sections = [
+          #   {
+          #     id: 1001,
+          #     title: '艺人库',
+          #     subtitle: '305位合作艺人'
+          #   },
+          #   {
+          #     id: 1002,
+          #     title: '梦想基金',
+          #     subtitle: '已筹得20,000元'
+          #   },
+          #   {
+          #     id: 1003,
+          #     title: '吉他课堂',
+          #     subtitle: '不断提升自己'
+          #   }
+          # ]
           # MV区块
           @media = Media.where(opened: true).order('sort desc').limit(3)
           @modules = [
@@ -46,12 +46,13 @@ module API
           
           @performers = Performer.where(verified: true).limit(4)
           
+          @user = User.find_by(private_token: params[:token])
           result = {
             banners: API::V1::Entities::Banner.represent(@banners),
-            vote: API::V1::Entities::Vote.represent(@vote, { user: User.find_by(private_token: params[:token]) }),
+            vote: API::V1::Entities::Vote.represent(@vote, { user: @user }),
             featured: @sections,
-            sections: @modules,
-            performers: API::V1::Entities::Performer.represent(@performers, { user: User.find_by(private_token: params[:token]) })
+            # sections: @modules,
+            performers: API::V1::Entities::Performer.represent(@performers, { user: @user })
           }
           
           { code: 0, message: 'ok', data: result }
