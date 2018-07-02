@@ -57,10 +57,14 @@ module API
             end
           end
           
-          counter = params[:action] == 'create' ? 1 : -1
-          
-          follow = Follow.create!(user_id: user.uid, followable_type: params[:follow_type], followable_id: params[:follow_id])
-          follow.change_stats!(counter)
+          if params[:action] == 'create'
+            follow = Follow.create!(user_id: user.uid, followable_type: params[:follow_type], followable_id: params[:follow_id])
+            follow.change_stats!(1)
+          else
+            follow = Follow.where(user_id: user.uid, followable_type: params[:follow_type], followable_id: params[:follow_id]).first
+            follow.change_stats!(-1)
+            follow.destroy!
+          end
           
           render_json_no_data
         end # end post action
