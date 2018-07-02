@@ -403,6 +403,14 @@ module API
           model.format_avatar_url
         end
         expose :comm_type, as: :type
+        expose :followed do |model, opts|
+          if opts and opts[:opts] and opts[:opts][:user]
+            user = opts[:opts][:user]
+            user.followed?(model)
+          else
+            false
+          end
+        end
       end
       
       class Topic < Base
