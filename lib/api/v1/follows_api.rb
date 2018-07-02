@@ -63,7 +63,7 @@ module API
           else
             follow = Follow.where(user_id: user.uid, followable_type: params[:follow_type], followable_id: params[:follow_id]).first
             follow.change_stats!(-1)
-            follow.destroy!
+            Follow.where(user_id: user.uid, followable_type: params[:follow_type], followable_id: params[:follow_id]).delete_all
           end
           
           render_json_no_data
