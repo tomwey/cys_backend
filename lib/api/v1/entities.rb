@@ -283,6 +283,7 @@ module API
         expose :avatar do |model, opts|
           model.avatar.url(:large)
         end
+        expose :comm_type, as: :type
         expose :school
         expose :follows_count
         expose :followed do |model, opts|
