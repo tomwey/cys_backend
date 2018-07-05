@@ -21,14 +21,14 @@ module API
             # puts '是微信浏览器'
             # url = request.original_url
             
-            redirect_url = "#{SiteConfig.wx_auth_redirect_uri}?provider=wechat&from_url=#{params[:url]}"
+            redirect_url = "#{SiteConfig.h5_auth_redirect_uri}?provider=wechat&from_url=#{params[:url]}"
             # redirect_url  = "#{SiteConfig.auth_redirect_uri}?url=#{url}&provider=wechat"#"#{wechat_auth_redirect_url}?url=#{request.original_url}"
 
             auth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{SiteConfig.wx_app_id}&redirect_uri=#{Rack::Utils.escape(redirect_url)}&response_type=code&scope=snsapi_userinfo&state=redpack#wechat_redirect"
             # redirect_to @wx_auth_url
           else
             
-            redirect_url = "#{SiteConfig.qq_auth_redirect_uri}?provider=qq&from_url=#{params[:url]}"
+            redirect_url = "#{SiteConfig.h5_auth_redirect_uri}?provider=qq&from_url=#{params[:url]}"
             
             auth_url = "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=#{SiteConfig.qq_app_id}&redirect_uri=#{Rack::Utils.escape(redirect_url)}&scope=get_user_info"
           end
@@ -44,7 +44,7 @@ module API
           optional :rid, type: String, desc: '红包ID'
         end
         post :auth_bind do
-          u = UserAuth.create_user(params[:provider], params[:code], "http://hhd.afterwind.cn/auth/redirect?provider=qq")
+          u = UserAuth.create_user(params[:provider], params[:code], "#{SiteConfig.h5_auth_redirect_uri}?provider=qq")
           if u.blank?
             return render_error(4003, '认证登录失败')
           end

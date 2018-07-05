@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     # redpack/result?id=3838939393
     get 'redpack/result' => 'redpacks#result', as: :redpack_result
     
-    get 'auth/redirect' => 'sessions#app_auth', as: :auth_redirect_uri
+    # get 'auth/redirect' => 'sessions#app_auth', as: :auth_redirect_uri
     
     # post redpack/take?id=4848474&sign=3838392
     # post 'redpack/take' => 'redpacks#take', as: :redpack_take
@@ -39,6 +39,10 @@ Rails.application.routes.draw do
     post 'pay/wx_notify' => 'home#wx_notify', as: :wx_notify
     
   end
+  
+  # get 'wx/redirect' => 'front/home#wap_auth', as: :wx_redirect_uri
+  # get 'qq/redirect' => 'front/home#wap_auth', as: :qq_redirect_uri
+  get 'auth/redirect' => 'front/home#wap_auth', as: :auth_redirect_uri
   
   # 队列后台管理
   require 'sidekiq/web'

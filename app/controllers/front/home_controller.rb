@@ -27,4 +27,20 @@ class Front::HomeController < Front::ApplicationController
     
   end
   
+  def wap_auth
+    if params[:provider] && (params[:provider] == 'qq' || params[:provider] == 'wechat')
+      from_url = params[:from_url] || SiteConfig.h5_front_url
+      if from_url.include? '?'
+        url = "#{from_url}&code=#{params[:code]}&provider=#{params[:provider]}"
+      else
+        url = "#{from_url}?code=#{params[:code]}&provider=#{params[:provider]}"
+      end
+      
+      redirect_to url
+    else
+      render text: '禁止登录', status: 403
+    end
+    
+  end
+  
 end
