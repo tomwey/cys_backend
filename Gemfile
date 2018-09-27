@@ -1,4 +1,5 @@
-source 'https://gems.ruby-china.org'
+# source 'https://gems.ruby-china.org'
+source 'https://gems.ruby-china.com'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
