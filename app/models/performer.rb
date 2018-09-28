@@ -1,5 +1,7 @@
 class Performer < ActiveRecord::Base
   validates :mobile, :name, :avatar, presence: true
+  validates_uniqueness_of :mobile
+  
   mount_uploader :avatar, AvatarUploader
   
   before_create :generate_uniq_id_and_token
