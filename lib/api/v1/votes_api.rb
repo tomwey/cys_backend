@@ -73,6 +73,10 @@ module API
             return render_error(3003, '投票选项不存在')
           end
           
+          if @vote._type == 2 and user.voted_items?(@vote.uniq_id, ids)
+            return render_error(3002, '你已经投过票了')
+          end
+          
           UserVoteLog.create!(user_id: user.uid, vote_id: @vote.uniq_id, ip: client_ip, address: params[:address], answers: ids)
           
           render_json(@vote, API::V1::Entities::Vote, { user: user })
