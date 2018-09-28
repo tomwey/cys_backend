@@ -16,4 +16,34 @@ class Banner < ActiveRecord::Base
     end while self.class.exists?(:uniq_id => uniq_id)
   end
   
+  def is_link?
+    self.link && (self.link.start_with?('http://') or self.link.start_with?('https://'))
+  end
+  
+  def is_vote?
+    self.link && self.link.start_with?('vote://')
+  end
+  
+  def is_media?
+    self.link && self.link.start_with?('media://')
+  end
+  
+  def vote
+    if self.is_vote?
+      _,id = self.link.split('id=')
+      @vote ||= Vote.find_by(uniq_id: id)
+    else
+      nil
+    end
+  end
+  
+  def media
+    if self.is_media?
+      _,id = self.link.split('id=')
+      @media ||= Media.find_by(uniq_id: id)
+    else
+      nil
+    end
+  end
+  
 end

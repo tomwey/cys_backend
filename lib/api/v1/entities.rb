@@ -266,18 +266,7 @@ module API
         expose :money, format_with: :rmb_format
         expose :created_at, as: :time, format_with: :month_date_time
       end
-      
-      class Banner < Base
-        expose :uniq_id, as: :id
-        expose :title
-        expose :image do |model, opts|
-          model.image.url(:large)
-        end
-        expose :link, format_with: :null
-        
-        # expose :view_count, :click_count
-      end
-      
+            
       class Performer < Base
         expose :uniq_id, as: :id
         expose :name
@@ -378,6 +367,19 @@ module API
       
       class MediaDetail < Media
         
+      end
+      
+      class Banner < Base
+        expose :uniq_id, as: :id
+        expose :title
+        expose :image do |model, opts|
+          model.image.url(:large)
+        end
+        expose :link, format_with: :null, if: proc { |o| o.is_link? }
+        expose :vote, using: API::V1::Entities::Vote, if: proc { |o| o.is_vote? }
+        expose :media, using: API::V1::Entities::Media, if: proc { |o| o.is_media? }
+        
+        # expose :view_count, :click_count
       end
       
       class MediaPlayLog < Base
