@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   
   def voted_items?(vote_id, answers)
     return false if answers.blank? or answers.empty?
-    UserVoteLog.where(user_id: self.uid, vote_id: vote_id).where(':answer = ANY(answers)', answer: answers).count > 0
+    UserVoteLog.where(user_id: self.uid, vote_id: vote_id).where('answers @> ARRAY[?]::varchar[]', answers).count > 0
   end
   
   def followed?(followable)

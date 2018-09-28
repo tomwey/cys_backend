@@ -306,7 +306,7 @@ module API
         expose :body
         expose :voted do |model, opts|
           user = opts[:user]
-          user && user.voted_items?(model.vote.uniq_id, [model.uniq_id])
+          user && user.voted_items?(model.vote.uniq_id, [model.uniq_id.to_s])
         end
       end
       
