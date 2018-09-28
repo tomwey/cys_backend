@@ -63,7 +63,7 @@ module API
             return render_error(3001, '投票已过期')
           end
           
-          if user.voted?(@vote)
+          if @vote._type == 1 and user.voted?(@vote)
             return render_error(3002, '你已经投过票了')
           end
           

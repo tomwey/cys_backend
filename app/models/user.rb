@@ -52,6 +52,11 @@ class User < ActiveRecord::Base
     UserVoteLog.where(user_id: self.uid, vote_id: vote.uniq_id).count > 0
   end
   
+  def voted_item?(vote_item)
+    return false if vote_item.blank? or vote_item.vote.blank?
+    UserVoteLog.where(user_id: self.uid, vote_id: vote_item.vote.uniq_id).where(':item_id = ANY(answers)', item_id: vote_item.uniq_id).count > 0
+  end
+  
   def followed?(followable)
     return false if followable.blank?
     
