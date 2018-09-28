@@ -319,7 +319,10 @@ module API
         expose :_type, as: :type
         expose :vote_count, :comments_count, :view_count, :likes_count
         expose :expired_at, as: :expire_time, format_with: :month_date_time
-        expose :vote_items, using: API::V1::Entities::VoteItem, options: { user: opts[:opts][:user] }
+        # expose :vote_items, using: API::V1::Entities::VoteItem, options: { user: opts[:opts][:user] }
+        expose :vote_items do |model, opts|
+          API::V1::Entities::VoteItem.represent model.vote_items, options.merge(user: opts[:opts][:user])
+        end
         expose :created_at, as: :time, format_with: :chinese_datetime
         expose :expired do |model, opts|
           model.expired?
