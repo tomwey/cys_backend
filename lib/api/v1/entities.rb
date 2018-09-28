@@ -306,7 +306,7 @@ module API
         expose :body
         expose :voted do |model, opts|
           user = opts[:user]
-          user.voted_items?(model.vote.uniq_id, [model.uniq_id])
+          user && user.voted_items?(model.vote.uniq_id, [model.uniq_id])
         end
       end
       
@@ -321,7 +321,12 @@ module API
         expose :expired_at, as: :expire_time, format_with: :month_date_time
         # expose :vote_items, using: API::V1::Entities::VoteItem, options: { user: opts[:opts][:user] }
         expose :vote_items do |model, opts|
-          API::V1::Entities::VoteItem.represent model.vote_items, options.merge(user: opts[:opts][:user])
+          if opts and opts[:opts] and opts[:opts][:user]
+            user = opts[:opts][:user]
+          else
+            user = nil
+          end
+          API::V1::Entities::VoteItem.represent model.vote_items, options.merge(user: user)
         end
         expose :created_at, as: :time, format_with: :chinese_datetime
         expose :expired do |model, opts|
