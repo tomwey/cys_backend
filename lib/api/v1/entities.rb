@@ -369,6 +369,10 @@ module API
         
       end
       
+      class SimpleVote < Base
+        
+      end
+      
       class Banner < Base
         expose :uniq_id, as: :id
         expose :title
