@@ -2,7 +2,7 @@ ActiveAdmin.register VoteItem do
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
-permit_params :performer_id, :body, :video, :sort, :opened, :vote_id
+permit_params :performer_id, :body, :video, :sort, :opened, :vote_id, :vote_count
 #
 # or
 #
@@ -36,6 +36,7 @@ form do |f|
     render partial: 'file_uploader', locals: { f: f }
     f.input :body, as: :text, input_html: { class: 'redactor' }, 
         placeholder: '网页内容，支持图文混排', hint: '网页内容，支持图文混排'
+    f.input :vote_count, label: '得票数'
     f.input :opened
     f.input :sort, hint: '值越小显示越靠前'
   end
