@@ -299,6 +299,10 @@ module API
         end
       end
       
+      class SimpleVote < Base
+        
+      end
+      
       class Vote < Base
         expose :uniq_id, as: :id
         expose :title

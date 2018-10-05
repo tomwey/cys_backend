@@ -12,6 +12,22 @@ permit_params :performer_id, :body, :video, :sort, :opened, :vote_id
 #   permitted
 # end
 
+index do
+  selectable_column
+  column '#', :id
+  column 'ID', :uniq_id
+  column '所属投票' do |o|
+    o.vote.try(:title) ? link_to(o.vote.try(:title), admin_vote_path(o.vote)) : '--'
+  end
+  column '候选艺人' do |o|
+    o.perform ? link_to(o.perform.name, admin_performer_path(o.perform)) : '--'
+  end
+  column '得票数', :vote_count
+  column '是否启用', :opened
+  column 'at', :created_at
+  actions
+end
+
 form do |f|
   f.semantic_errors
   f.inputs '基本信息' do
