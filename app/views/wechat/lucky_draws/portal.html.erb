@@ -23,7 +23,7 @@
     </div>
     <% else %>
     <div class="cj-users">
-      <p style="text-align: center; font-size: 18px; color: #666; margin-top: 30px; margin-bottom: 30px;">恭喜以下人员，获得<span style="color:red;"><%= @prize.name %></span></p>
+      <p style="text-align: center; font-size: 18px; color: #666; margin-top: 30px; margin-bottom: 30px;">恭喜以下人员，获得【<%= @prize.name %>】</p>
       <div class="row">
         <% @users.each_with_index do |user,index| %>
         <div class="col-md-2 col-sm-3 col-xs-4 img-box">
