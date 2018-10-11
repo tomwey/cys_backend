@@ -193,3 +193,19 @@ td {
 
 td.black { border-color: #000; }
 td.white { border-color: #fff; }
+
+.cj-box {
+  padding-top: 60px;
+  h2 {
+    font-size: 22px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .subtitle {
+    margin-top: 30px;
+    font-size: 16px;
+    color: #666;
+    text-align: center;
+  }
+}
