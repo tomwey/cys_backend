@@ -15,9 +15,14 @@ class Wechat::LuckyDrawsController < Wechat::ApplicationController
     
     @page_title = @ld.title + '抽奖签到'
     
+    @prize = @ld.lucky_draw_items.where(opened: true).where(started_at: nil).order('sort asc').first
+    if @prize.blank?
+      render text: '抽奖已结束', status: 403
+      return
+    end
+    
     LuckyDrawCheckin.where(user_id: current_user.id, lucky_draw_id: @ld.id).first_or_create!
     
-    @prize = @ld.lucky_draw_items.where(opened: true).where(started_at: nil).order('sort asc').first
   end
   
   def portal
