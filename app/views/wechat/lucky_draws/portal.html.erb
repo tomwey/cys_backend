@@ -26,7 +26,7 @@
     
     var imgs = $('#user-icons img');
     for (var i = 0; i < imgs.length; i++) {
-      var img = imgs[i];
+      var img = $(imgs[i]);
       var index = parseInt(img.data('index'));
       console.log(index);
       var deg = index * 36;
