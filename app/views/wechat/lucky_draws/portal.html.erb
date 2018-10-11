@@ -84,7 +84,7 @@
         if (dt < 60) {
           $('#countdown').text('计时: ' + dt + '秒');
         } else {
-          var min = dt / 60;
+          var min = Math.round(dt / 60);
           var sec = dt % 60;
           $('#countdown').text('计时: ' + min + '分' + sec + '秒');
         }
