@@ -49,6 +49,8 @@
       vote: '投票'
       vote_item: '投票选项'
       user_vote_log: '用户投票记录'
+      lucky_draw: '抽奖'
+      lucky_draw_item: '抽奖奖项'
     attributes:
       user:
         uid: 'ID'
@@ -274,6 +276,17 @@
         video: '投票视频介绍'
         opened: '是否启用该选项'
         body: '投票文本介绍'
+      lucky_draw:
+        title: '主题'
+        body: '简介'
+        opened: '是否开启'
+        uniq_id: 'ID'
+      lucky_draw_item:
+        name: '奖项名称'
+        quantity: '抽取数量'
+        prize: '奖品简介'
+        opened: '是否开启'
+        sort: '显示顺序'
     errors:
       models:
         user: "用户"
