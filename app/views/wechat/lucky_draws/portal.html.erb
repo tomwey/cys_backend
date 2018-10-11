@@ -3,9 +3,11 @@
     <h2><%= @ld.title %>现场抽奖，赢取<span style="color:red;"><%= @prize.name %></span></h2>
     <div class="cj-users">
       <p class="subtitle">抽奖人员如下</p>
-      <div class="row" id="user-icons">
+      <div class="row">
         <% @users.each_with_index do |user,index| %>
-          <img src="<%= user.auth_profile.headimgurl %>" data-index="<%= index %>">
+        <div class="col-md-2 col-sm-3 col-xs-4 img-box">
+          <img src="<%= user.auth_profile.headimgurl %>" data-index="<%= index %>" class="uicon" id="uicon-<%= index %>">
+        </div>
         <% end %>
       </div>
     </div>
@@ -15,16 +17,51 @@
 
 <% content_for :scripts do %>
 <script>
+  var shakeTimer;
   $('#cj-button').click(function() {
-    $('#user-icons').addClass('cj-user-icons');
-    
-    var imgs = $('#user-icons img');
-    for (var i = 0; i < imgs.length; i++) {
-      var img = $(imgs[i]);
-      var index = parseInt(img.data('index'));
-      console.log(index);
-      var deg = index * 36;
-      imgs[i].style.transform = "rotateY(" + deg + "deg) translateZ(350px)";
+    var val = $('#cj-button').data('starting');
+    if (val == '1') {
+      $('#cj-button').data('starting', '0');
+      $('#cj-button').text('开始抽奖');
+      
+      if (shakeTimer) {
+        clearInterval(shakeTimer);
+      }
+      
+      // 开始抽奖
+      $.ajax({
+        url: '/wx/cj/start',
+        type: 'POST',
+        data: { id: '<%= @ld.uniq_id %>' },
+        success: function(data) {
+          
+        },
+        error: function(error) {
+          
+        }
+        
+      });
+    } else {
+      $('#cj-button').data('starting', '1');
+      $('#cj-button').text('停止抽奖');
+      
+      // 开启抽奖动画
+      clearInterval(shakeTimer);
+      var currentIndex = -1;
+      
+      shakeTimer = setInterval(function() {
+        if (currentIndex != -1) {
+          $('#uicon-' + currentIndex).show();
+        }
+        
+        var size = parseInt('<%= @users.size %>');
+        var index = Math.round(Math.random() * size );
+        if (index != currentIndex) {
+          currentIndex = index;
+          $('#uicon-' + index).hide();
+        }
+        
+      }, 200);
     }
   });
 </script>
