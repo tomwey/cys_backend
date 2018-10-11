@@ -40,6 +40,14 @@ Rails.application.routes.draw do
     
   end
   
+  namespace :wechat, path: 'wx' do
+    get 'login' => 'sessions#new', as: :login
+    get    'redirect' => 'sessions#save_user', as: :redirect_uri
+    delete 'logout'   => 'sessions#destroy',   as: :logout
+    
+    get '/cj/:id/checkin' => 'lucky_draws#checkin', as: :cj_checkin
+  end
+  
   # get 'wx/redirect' => 'front/home#wap_auth', as: :wx_redirect_uri
   # get 'qq/redirect' => 'front/home#wap_auth', as: :qq_redirect_uri
   get 'auth/redirect' => 'front/home#wap_auth', as: :auth_redirect_uri

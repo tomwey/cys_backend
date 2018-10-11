@@ -5,7 +5,7 @@ class Wechat::SessionsController < Wechat::ApplicationController
   def new
     if session['wechat.code'].blank?
       # 首先去获取code
-      url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{SiteConfig.wx_app_id}&redirect_uri=#{Rack::Utils.escape(wechat_redirect_uri_url)}&response_type=code&scope=snsapi_userinfo&state=yujian_web#wechat_redirect"
+      url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=#{SiteConfig.wx_app_id}&redirect_uri=#{Rack::Utils.escape(wechat_redirect_uri_url)}&response_type=code&scope=snsapi_userinfo&state=cys_web#wechat_redirect"
       # puts url
       redirect_to(url)
     else
@@ -23,29 +23,9 @@ class Wechat::SessionsController < Wechat::ApplicationController
       return 
     end
     
-    # 开始登录
-    session['wechat.code'] = params[:code]
+    # 开始登录    
+    user = UserAuth.wechat_auth(params[:code], nil)
     
-    resp = RestClient.get "https://api.weixin.qq.com/sns/oauth2/access_token", 
-                   { :params => { 
-                                  :appid      => SiteConfig.wx_app_id,
-                                  :secret     => SiteConfig.wx_app_secret,
-                                  :grant_type => "authorization_code",
-                                  :code       => params[:code]
-                                } 
-                   }
-                   
-    result = JSON.parse(resp)
-    
-    openid = result['openid'];
-    if openid.blank?
-      # flash[:error] = '无效的code，请重试'
-      # redirect_to(request.referrer)
-      render(text: "无效的code，请重试", status: 403)
-      return 
-    end
-    
-    user = User.from_wechat_auth(result)
     if user
       log_in user
       remember(user)
