@@ -3,11 +3,11 @@
     <h2><%= @ld.title %>现场抽奖，赢取<span style="color:red;"><%= @prize.name %></span></h2>
     <div class="cj-users">
       <p class="subtitle">抽奖人员如下</p>
-      <div class="row">
+      <div class="row" id="user-icons">
         <% @users.each do |user| %>
-        <div class="col-md-2 col-sm-3 col-xs-4">
+        <div class="col-md-2 col-sm-3 col-xs-4 img-box">
           <div class="thumbnail">
-            <%= image_tag user.auth_profile.headimgurl, class: 'image-circle' %>
+            <%= image_tag user.auth_profile.headimgurl %>
             <h3><%= user.auth_profile.nickname %></h3>
           </div>
           
@@ -15,14 +15,14 @@
         <% end %>
       </div>
     </div>
-    <div class="cj-progress" id="cj-progress" style="display:none;">
-      <p class="subtitle">抽奖进行中...</p>
-      <div class="user-icons">
-        <% @users.each do |user| %>
-          <%= image_tag user.auth_profile.headimgurl, class: 'image-circle' %>
-        <% end %>
-      </div>
-    </div>
-    <p class="cj-buttons"><button type="button" class="btn btn-lg btn-primary" onclick="">开始抽奖</button></p>
+    <p class="cj-buttons"><button type="button" class="btn btn-lg btn-primary" id="cj-button">开始抽奖</button></p>
   </div>
 </div>
+
+<% content_for :scripts do %>
+<script>
+  $('#cj-button').click(function() {
+    $('#user-icons').addClass('cj-user-icons');
+  });
+</script>
+<% end %>

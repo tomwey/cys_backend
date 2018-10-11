@@ -194,6 +194,21 @@ td {
 td.black { border-color: #000; }
 td.white { border-color: #fff; }
 
+@keyframes cj-an1 {
+  0% {
+    transform: rotateY(0deg);
+  }
+  
+  50% {
+    transform: rotateY(180deg);
+  }
+  
+  100% {
+    transform: rotateY(360deg);
+  }
+  
+}
+
 .cj-box {
   padding-top: 60px;
   h2 {
@@ -208,4 +223,21 @@ td.white { border-color: #fff; }
     color: #666;
     text-align: center;
   }
+  
+  .cj-user-icons {
+    perspective: 2000px;
+    transform-style: preserve-3d;
+    animation: cj-an1 2s linear 0s infinite;
+    
+    .img-box {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 120px;
+      height: 120px;
+    }
+  }
 }
+
