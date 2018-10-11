@@ -5,8 +5,8 @@
       <p class="subtitle">抽奖人员如下</p>
       <div class="row">
         <% @users.each_with_index do |user,index| %>
-        <div class="col-md-2 col-sm-3 col-xs-4 img-box">
-          <img src="<%= user.auth_profile.headimgurl %>" data-index="<%= index %>" class="uicon" id="uicon-<%= index %>">
+        <div class="col-md-2 col-sm-3 col-xs-4 img-box" id="uicon-<%= index %>">
+          <img src="<%= user.auth_profile.headimgurl %>" data-index="<%= index %>" class="uicon">
           <p><%= user.auth_profile.nickname %></p>
         </div>
         <% end %>
@@ -19,6 +19,8 @@
 <% content_for :scripts do %>
 <script>
   var shakeTimer;
+  var currentIndex = -1;
+  
   $('#cj-button').click(function() {
     var val = $('#cj-button').data('starting');
     if (val == '1') {
@@ -27,6 +29,10 @@
       
       if (shakeTimer) {
         clearInterval(shakeTimer);
+      }
+      
+      if (currentIndex != -1) {
+        $('#uicon-' + currentIndex).fadeIn(100);
       }
       
       // 开始抽奖
@@ -48,7 +54,6 @@
       
       // 开启抽奖动画
       clearInterval(shakeTimer);
-      var currentIndex = -1;
       
       shakeTimer = setInterval(function() {
         if (currentIndex != -1) {
