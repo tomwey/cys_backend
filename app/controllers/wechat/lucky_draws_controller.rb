@@ -7,7 +7,13 @@ class Wechat::LuckyDrawsController < Wechat::ApplicationController
   before_filter :check_user
   
   def checkin
+    ld = LuckyDraw.find_by(uniq_id: params[:id])
+    if ld.blank? or !ld.opened
+      render text: '抽奖不存在', status: 404
+      return
+    end
     
+    LuckyDrawCheckin.where(user_id: current_user.id, lucky_draw_id: ld.id).first_or_create!
   end
   
   private 
