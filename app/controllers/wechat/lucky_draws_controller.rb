@@ -39,12 +39,40 @@ class Wechat::LuckyDrawsController < Wechat::ApplicationController
     end
     
     @prize = @ld.lucky_draw_items.where(opened: true).order('sort asc').first
-    
-    @users = @ld.users.order('id desc')
+    if @prize.started_at.blank?
+      @users = @ld.users.order('id desc')
+    else
+      user_ids = LuckyDrawResult.where(lucky_draw_id: @ld.id).order('id desc').pluck(:user_id)
+      @users = User.where(id: user_ids)
+    end
     
   end
   
   def start
+    id = params[:id]
+    if id.blank?
+      @ld = LuckyDraw.where(opened: true).order('id desc').first
+    else
+      @ld = LuckyDraw.find_by(uniq_id: id)
+    end
+    
+    if @ld.blank? or !@ld.opened
+      render text: '抽奖不存在'
+      return
+    end
+    
+    @prize = @ld.lucky_draw_items.where(opened: true).order('sort asc').first
+    if @prize.started_at.present?
+      render text: '抽奖已结束'
+      return
+    end
+    
+    user_ids = LuckyDrawCheckin.where(lucky_draw_id: @ld.id).order('RANDOM()').limit(@prize.quantity).pluck(:user_id)
+    
+    user_ids.each do |uid|
+      LuckyDrawResult.create!(user_id: uid, lucky_draw_id: @ld.id, lucky_draw_item_id: @prize.id)
+    end
+    render text: '1'
     
   end
   

@@ -1,8 +1,9 @@
 <div class="container">
   <div class="cj-box">
     <h2><%= @ld.title %>现场抽奖，赢取<span style="color:red;"><%= @prize.name %></span></h2>
+    <% if @prize.started_at.blank? %>
     <div class="cj-users">
-      <div class="subtitle clearfix">
+      <div class="subtitle clearfix" id="cj-operation">
         <p class="pull-left">抽奖人员如下</p>
         <p class="pull-right">
           <span id="countdown" style="padding-right: 10px;"></span>
@@ -20,6 +21,21 @@
         <% end %>
       </div>
     </div>
+    <% else %>
+    <div class="cj-users">
+      <p style="text-align: center; font-size: 18px; color: #666;">中奖人员名单如下：</p>
+      <div class="row">
+        <% @users.each_with_index do |user,index| %>
+        <div class="col-md-2 col-sm-3 col-xs-4 img-box">
+          <div id="uicon-<%= index %>">
+            <img src="<%= user.auth_profile.headimgurl %>">
+            <p><%= user.auth_profile.nickname %></p>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+    <% end %>
     
   </div>
 </div>
@@ -51,10 +67,14 @@
         type: 'POST',
         data: { id: '<%= @ld.uniq_id %>' },
         success: function(data) {
-          
+          if (data == '1') {
+            window.location.href = '/wx/cj/portal';
+          } else {
+            App.alert(data, '#cj-operation');
+          }
         },
         error: function(error) {
-          
+          App.alert('服务器出错了，请重试', '#cj-operation');
         }
         
       });
@@ -89,7 +109,7 @@
           $('#countdown').text('计时: ' + min + '分' + sec + '秒');
         }
         
-      }, 200);
+      }, 100);
     }
   });
 </script>
