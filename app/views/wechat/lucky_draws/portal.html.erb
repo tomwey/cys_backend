@@ -52,17 +52,17 @@
       
       shakeTimer = setInterval(function() {
         if (currentIndex != -1) {
-          $('#uicon-' + currentIndex).show(200);
+          $('#uicon-' + currentIndex).fadeIn(100);
         }
         
         var size = parseInt('<%= @users.size %>');
         var index = Math.round(Math.random() * size );
         if (index != currentIndex) {
           currentIndex = index;
-          $('#uicon-' + index).hide(200);
+          $('#uicon-' + index).fadeOut(100);
         }
         
-      }, 500);
+      }, 200);
     }
   });
 </script>
