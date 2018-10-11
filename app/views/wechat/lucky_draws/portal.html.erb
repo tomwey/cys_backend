@@ -5,9 +5,11 @@
       <p class="subtitle">抽奖人员如下</p>
       <div class="row">
         <% @users.each_with_index do |user,index| %>
-        <div class="col-md-2 col-sm-3 col-xs-4 img-box" id="uicon-<%= index %>">
-          <img src="<%= user.auth_profile.headimgurl %>" data-index="<%= index %>" class="uicon">
-          <p><%= user.auth_profile.nickname %></p>
+        <div class="col-md-2 col-sm-3 col-xs-4 img-box">
+          <div id="uicon-<%= index %>">
+            <img src="<%= user.auth_profile.headimgurl %>" data-index="<%= index %>" class="uicon">
+            <p><%= user.auth_profile.nickname %></p>
+          </div>
         </div>
         <% end %>
       </div>
