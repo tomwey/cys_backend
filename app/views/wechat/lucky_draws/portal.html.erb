@@ -68,7 +68,7 @@
         data: { id: '<%= @ld.uniq_id %>' },
         success: function(data) {
           if (data == '1') {
-            window.location.href = '/wx/cj/portal';
+            window.location.href = '/wx/cj/portal' + '?cjak=<%= SiteConfig.cj_ak %>';
           } else {
             App.alert(data, '#cj-operation');
           }
