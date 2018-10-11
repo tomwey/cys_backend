@@ -28,9 +28,9 @@ class Wechat::LuckyDrawsController < Wechat::ApplicationController
     
     id = params[:id]
     if id.blank?
-      @ld = LuckDraw.where(opened: true).order('id desc').first
+      @ld = LuckyDraw.where(opened: true).order('id desc').first
     else
-      @ld = LuckDraw.find_by(uniq_id: id)
+      @ld = LuckyDraw.find_by(uniq_id: id)
     end
     
     if @ld.blank? or !@ld.opened
