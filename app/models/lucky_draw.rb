@@ -18,4 +18,14 @@ class LuckyDraw < ActiveRecord::Base
     end while self.class.exists?(:uniq_id => uniq_id)
   end
   
+  def reset_data!
+    @prize = self.lucky_draw_items.where(opened: true).order('sort asc').first
+    if @prize
+      @prize.started_at = nil
+      @prize.save!
+    end
+    
+    LuckyDrawResult.where(lucky_draw_id: self.id, lucky_draw_item_id: @prize.id).delete_all
+  end
+  
 end

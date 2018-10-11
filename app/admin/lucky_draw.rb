@@ -12,6 +12,28 @@ permit_params :title, :body, :opened, lucky_draw_items_attributes: [:id, :name, 
 #   permitted
 # end
 
+index do
+  selectable_column
+  column('#',:id)
+  column :uniq_id
+  column :title, sortable: false
+  column :opened, sortable: false
+  column 'at', :created_at
+  
+  actions defaults: false do |o|
+    item "查看", [:admin, o]
+    item "编辑", edit_admin_lucky_draw_path(o)
+    item "删除", admin_lucky_draw_path(o), method: :delete, data: { confirm: '你确定吗？' }
+    item "重置", reset_data_admin_lucky_draw_path(o), method: :put, data: { confirm: '你确定吗？' }
+  end
+  
+end
+
+member_action :reset_data, method: :put do
+  resource.reset_data!  
+  redirect_to collection_path, notice: '重置成功'
+end
+
 form do |f|
   f.semantic_errors
   f.inputs '基本资料' do
