@@ -7,6 +7,7 @@
         <% @users.each_with_index do |user,index| %>
         <div class="col-md-2 col-sm-3 col-xs-4 img-box">
           <img src="<%= user.auth_profile.headimgurl %>" data-index="<%= index %>" class="uicon" id="uicon-<%= index %>">
+          <p><%= user.auth_profile.nickname %></p>
         </div>
         <% end %>
       </div>
@@ -51,17 +52,17 @@
       
       shakeTimer = setInterval(function() {
         if (currentIndex != -1) {
-          $('#uicon-' + currentIndex).show();
+          $('#uicon-' + currentIndex).show(200);
         }
         
         var size = parseInt('<%= @users.size %>');
         var index = Math.round(Math.random() * size );
         if (index != currentIndex) {
           currentIndex = index;
-          $('#uicon-' + index).hide();
+          $('#uicon-' + index).hide(200);
         }
         
-      }, 200);
+      }, 500);
     }
   });
 </script>
