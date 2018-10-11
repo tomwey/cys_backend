@@ -226,6 +226,7 @@ td.white { border-color: #fff; }
   
   .cj-user-icons {
     perspective: 2000px;
+    height: 400px;
     transform-style: preserve-3d;
     animation: cj-an1 2s linear 0s infinite;
     
@@ -238,6 +239,7 @@ td.white { border-color: #fff; }
       width: 120px;
       height: 120px;
     }
+    
   }
 }
 

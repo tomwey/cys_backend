@@ -4,10 +4,10 @@
     <div class="cj-users">
       <p class="subtitle">抽奖人员如下</p>
       <div class="row" id="user-icons">
-        <% @users.each do |user| %>
+        <% @users.each_with_index do |user,index| %>
         <div class="col-md-2 col-sm-3 col-xs-4 img-box">
           <div class="thumbnail">
-            <%= image_tag user.auth_profile.headimgurl %>
+            <img src="<%= user.auth_profile.headimgurl %>" data-index="<%= index %>">
             <h3><%= user.auth_profile.nickname %></h3>
           </div>
           
@@ -23,6 +23,15 @@
 <script>
   $('#cj-button').click(function() {
     $('#user-icons').addClass('cj-user-icons');
+    
+    var imgs = $('#user-icons img');
+    for (var i = 0; i < imgs.length; i++) {
+      var img = imgs[i];
+      var index = parseInt(img.data('index'));
+      console.log(index);
+      var deg = index * 36;
+      img.style.transform = "rotateY(" + deg + "deg) translateZ(350px)";
+    }
   });
 </script>
 <% end %>
