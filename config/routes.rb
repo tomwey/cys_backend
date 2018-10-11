@@ -46,6 +46,9 @@ Rails.application.routes.draw do
     delete 'logout'   => 'sessions#destroy',   as: :logout
     
     get '/cj/:id/checkin' => 'lucky_draws#checkin', as: :cj_checkin
+    get '/cj/portal'      => 'lucky_draws#portal',  as: :cj_portal
+    post '/cj/start'      => 'lucky_draws#start'
+    post '/cj/stop'       => 'lucky_draws#stop'
   end
   
   # get 'wx/redirect' => 'front/home#wap_auth', as: :wx_redirect_uri

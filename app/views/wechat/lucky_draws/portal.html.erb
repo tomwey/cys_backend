@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="cj-box">
+    <h2><%= @ld.title %>现场抽奖，赢取<span style="color:red;"><%= @prize.name %></span></h2>
+    <p class="subtitle">抽奖人员如下</p>
+    <div class="cj-users">
+      <div class="row">
+        <% @users.each do |user| %>
+        <div class="col-2 col-sm-3 col-xs-4">
+          <%= image_tag user.auth_profile.headimgurl, class: 'image-circle' %>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
