@@ -72,8 +72,11 @@ class Wechat::LuckyDrawsController < Wechat::ApplicationController
     user_ids.each do |uid|
       LuckyDrawResult.create!(user_id: uid, lucky_draw_id: @ld.id, lucky_draw_item_id: @prize.id)
     end
-    render text: '1'
     
+    @prize.started_at = Time.zone.now
+    @prize.save!
+    
+    render text: '1'
   end
   
   def stop
